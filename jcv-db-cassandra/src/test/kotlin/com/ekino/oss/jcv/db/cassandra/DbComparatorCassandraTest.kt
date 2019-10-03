@@ -1,0 +1,172 @@
+package com.ekino.oss.jcv.db.cassandra
+
+import com.datastax.oss.driver.api.querybuilder.QueryBuilder
+import com.ekino.oss.jcv.db.cassandra.util.CassandraDataSource
+import com.ekino.oss.jcv.db.cassandra.util.DBComparatorBuilder
+import org.junit.jupiter.api.Test
+import org.testcontainers.containers.CassandraContainer
+import org.testcontainers.junit.jupiter.Container
+import org.testcontainers.junit.jupiter.Testcontainers
+
+@Testcontainers
+class DbComparatorCassandraTest {
+
+    companion object {
+
+        @JvmStatic
+        @Container
+        val cassandraContainer: KCassandraContainer = KCassandraContainer(
+            "cassandra:latest"
+        )
+            .withEnv("CASSANDRA_DC", "local")
+            .withEnv("CASSANDRA_ENDPOINT_SNITCH", "GossipingPropertyFileSnitch")
+            .withInitScript("com/ekino/oss/jcv/db/cassandra/cassandra_db_test.cql")
+    }
+
+    private fun assertThatQuery(query: String) = DBComparatorBuilder
+        .create()
+        .datasource(CassandraDataSource(
+                cassandraContainer.envMap["CASSANDRA_DC"] ?: "",
+                cassandraContainer.containerIpAddress,
+                cassandraContainer.getMappedPort(CassandraContainer.CQL_PORT)
+                ))
+        .build(query)
+
+    @Test
+    fun `Should test cassandra type`() {
+
+        val expected = // language=json
+            """[{
+            "bigint_field": 9223372036854775806,
+            "float_field": 12345.679,
+            "smallint_field": 32766,
+            "tuple_field": [
+                "fruit",
+                1
+            ],
+            "custom_type_field": {
+                "test_field_text": "test",
+                "test_field_int": 1
+            },
+            "list_udt_field": [{
+                "test_field_text": "test",
+                "test_field_int": 1
+            }],
+            "list_field": [
+                1,
+                2,
+                3,
+                4
+            ],
+            "timestamp_field": "1970-01-19T00:25:01.239Z",
+            "varint_field": 1,
+            "map_field": {
+                "legume": 2,
+                "fruit": 1
+            },
+            "tinyint_field": 100,
+            "date_field": "9999-12-31",
+            "set_field": [
+                1,
+                2,
+                3,
+                4
+            ],
+            "time_field": "00:11:12",
+            "duration_field": "89h9m9s",
+            "inet_field": "127.0.0.1",
+            "text_field": "text field",
+            "decimal_field": 12345.67898,
+            "int_field": 2147483646,
+            "id": "28f4dcde-a221-4133-8d72-4115c4d24038",
+            "varchar_field": "varchar field",
+            "double_field": 12345.67898,
+            "ascii_field": "A",
+            "boolean_field": true,
+            "complex_type": [
+              {
+                "test_field_int": 1,
+                "test_type": [{
+                  "test_field_int": 1,
+                  "test_field_text": "test"
+                }]
+              }
+            ]  ,
+            "column_null": null
+        }]""".trimIndent()
+
+        assertThatQuery("select * from cassandratest.cassandra_table_type")
+            .isValidAgainst(expected)
+    }
+
+    @Test
+    fun `Should test cassandra type with cql builder`() {
+        val expected = // language=json
+            """[{
+            "bigint_field": 9223372036854775806,
+            "float_field": 12345.679,
+            "smallint_field": 32766,
+            "tuple_field": [
+                "fruit",
+                1
+            ],
+            "custom_type_field": {
+                "test_field_text": "test",
+                "test_field_int": 1
+            },
+            "list_udt_field": [{
+                "test_field_text": "test",
+                "test_field_int": 1
+            }],
+            "list_field": [
+                1,
+                2,
+                3,
+                4
+            ],
+            "timestamp_field": "1970-01-19T00:25:01.239Z",
+            "varint_field": 1,
+            "map_field": {
+                "legume": 2,
+                "fruit": 1
+            },
+            "tinyint_field": 100,
+            "date_field": "9999-12-31",
+            "set_field": [
+                1,
+                2,
+                3,
+                4
+            ],
+            "time_field": "00:11:12",
+            "duration_field": "89h9m9s",
+            "inet_field": "127.0.0.1",
+            "text_field": "text field",
+            "decimal_field": 12345.67898,
+            "int_field": 2147483646,
+            "id": "28f4dcde-a221-4133-8d72-4115c4d24038",
+            "varchar_field": "varchar field",
+            "double_field": 12345.67898,
+            "ascii_field": "A",
+            "boolean_field": true,
+            "complex_type": [
+              {
+                "test_field_int": 1,
+                "test_type": [{
+                  "test_field_int": 1,
+                  "test_field_text": "test"
+                }]
+              }
+            ]  ,
+            "column_null": null
+        }]""".trimIndent()
+
+        DbComparatorCassandra.assertThatQuery(QueryBuilder.selectFrom("cassandratest", "cassandra_table_type").all())
+            .using(CassandraDataSource(
+                cassandraContainer.envMap["CASSANDRA_DC"] ?: "",
+                cassandraContainer.containerIpAddress,
+                cassandraContainer.getMappedPort(CassandraContainer.CQL_PORT)
+                ))
+            .isValidAgainst(expected)
+    }
+}
