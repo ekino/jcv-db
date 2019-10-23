@@ -1,8 +1,20 @@
 # JCV-DB
 
-JSON Content Validator for Database (JCV-DB) allow you to compare database contents against a JSON with JCV validators.
+JSON Content Validator for Database (JCV-DB) allow you to compare database contents against a JSON with [JCV](https://github.com/ekino/jcv) validators.
+
+[![Build Status](https://travis-ci.org/ekino/jcv-db.svg?branch=master)](https://travis-ci.org/ekino/jcv-db)
+[![GitHub (pre-)release](https://img.shields.io/github/release/ekino/jcv-db/all.svg)](https://github.com/ekino/jcv-db/releases)
+[![Maven Central](https://img.shields.io/maven-central/v/com.ekino.oss.jcv-db/jcv-db-core)](https://search.maven.org/search?q=g:com.ekino.oss.jcv-db)
+[![GitHub license](https://img.shields.io/github/license/ekino/jcv.svg)](https://github.com/ekino/jcv/blob/master/LICENSE.md)
 
 ## Table of contents
+
+* [Summary](#summary)
+* [Quick start](#quick-start)
+    * [Assertj-db module](#assertj-db)
+    * [JDBC module](#jdbc-module)
+    * [Cassandra module](#cassandra-module)
+    * [Mongo database module](#mongo-database-module)
 
 ## Summary
 
@@ -10,8 +22,6 @@ JCV-DB provides assertions to validate database content against a json file. The
 [JCV](https://github.com/ekino/jcv) validators are also supported making tests light and exhaustive.
 
 ## Quick Start
-
-### Core module
 
 ### Assertj-db
 
@@ -79,11 +89,11 @@ dependencies {
     testImplementation 'org.skyscreamer:jsonassert:1.5.0'
     testImplementation 'org.assertj:assertj-db:1.2.0'
     testImplementation 'com.ekino.oss.jcv:jcv-core:1.4.1'
-    testImplementation 'jcvcom.ekino.oss.jcv-db:jcv-assertj-db:0.0.1'
+    testImplementation 'com.ekino.oss.jcv-db:jcv-assertj-db:0.0.1'
     ...
 }
 ```
-### Jdbc
+### Jdbc module
 
 A JCV-DB module that allow you to execute sql requests. Only PostgreSQL, MySQL, MSSQL server are supported in this module.
 
@@ -149,12 +159,12 @@ dependencies {
     testImplementation 'org.skyscreamer:jsonassert:1.5.0'
     testImplementation 'org.assertj:assertj-db:1.2.0'
     testImplementation 'com.ekino.oss.jcv:jcv-core:1.4.1'
-    testImplementation 'jcvcom.ekino.oss.jcv-db:jcv-jdbc:0.0.1'
+    testImplementation 'com.ekino.oss.jcv-db:jcv-jdbc:0.0.1'
     ...
 }
 ```
 
-### Cassandra
+### Cassandra module
 
 A JCV-DB module that allow you to execute cql requests and criteria builder in cassandra database
 
@@ -220,14 +230,14 @@ dependencies {
     testImplementation 'org.skyscreamer:jsonassert:1.5.0'
     testImplementation 'org.assertj:assertj-db:1.2.0'
     testImplementation 'com.ekino.oss.jcv:jcv-core:1.4.1'
-    testImplementation 'jcvcom.ekino.oss.jcv-db:jcv-cassandra:0.0.1'
+    testImplementation 'com.ekino.oss.jcv-db:jcv-cassandra:0.0.1'
     ...
 }
 ```
 
-### Mongo-db
+### Mongo database module
 
-A JCV-DB module that allow you 
+A JCV-DB module that allow you to mongo database content against a json file.
 
 #### Example
 
@@ -291,10 +301,9 @@ dependencies {
     testImplementation 'org.skyscreamer:jsonassert:1.5.0'
     testImplementation 'org.assertj:assertj-db:1.2.0'
     testImplementation 'com.ekino.oss.jcv:jcv-core:1.4.1'
-    testImplementation 'jcvcom.ekino.oss.jcv-db:jcv-mongo:0.0.1'
+    testImplementation 'com.ekino.oss.jcv-db:jcv-mongo:0.0.1'
     ...
 }
 ```
 
-## Validators
 

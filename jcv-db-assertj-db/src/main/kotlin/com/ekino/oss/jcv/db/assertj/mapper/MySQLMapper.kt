@@ -3,6 +3,8 @@ package com.ekino.oss.jcv.db.assertj.mapper
 import com.ekino.oss.jcv.db.mapper.geometry.GeometryMapper.fromByteArrayToGeometryType
 import com.ekino.oss.jcv.db.util.takeIfIsJson
 import org.assertj.db.type.Value
+import java.sql.Time
+import java.sql.Timestamp
 
 open class MySQLMapper : AssertJBaseMapper() {
 
@@ -18,8 +20,8 @@ open class MySQLMapper : AssertJBaseMapper() {
         return stringValue.takeIfIsJson() ?: stringValue
     }
 
-    override fun mapTimeType(value: Value) = value.value.toString().trim { it <= ' ' }
-    override fun mapDateTimeType(value: Value) = value.value.toString().trim { it <= ' ' }
+    override fun mapTimeType(value: Value) = (value.value as Time).toLocalTime().toString()
+    override fun mapDateTimeType(value: Value) = (value.value as Timestamp).toInstant().toString()
     override fun mapDateType(value: Value) = value.value.toString().trim { it <= ' ' }
 
     override fun mapBytesType(value: Value): Any {

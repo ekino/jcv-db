@@ -49,7 +49,7 @@ class MySQLTypeTest {
                     "column_date": "9999-12-31",
                     "column_int": 12345,
                     "column_year": "2155-01-01",
-                    "column_time": "01:11:12",
+                    "column_time": "{#date_time_format:iso_time#}",
                     "column_text": "text",
                     "column_char": "c",
                     "column_numeric": 123123,
@@ -67,10 +67,10 @@ class MySQLTypeTest {
                     "column_varchar": "varchar",
                     "column_smallint": 1234,
                     "id": 1,
-                    "column_timestamp": "1994-11-01 10:59:59.0",
+                    "column_timestamp": "{#date_time_format:iso_instant#}",
                     "column_decimal": 7895,
                     "column_bigint": 896932589235,
-                    "column_datetime": "10000-01-01 00:59:59.0",
+                    "column_datetime": "{#date_time_format:iso_instant#}",
                     "column_point": {
                         "x": 1,
                         "y": 3

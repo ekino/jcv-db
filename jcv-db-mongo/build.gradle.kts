@@ -63,6 +63,10 @@ publishing {
     }
 }
 
+signing {
+    sign(publishing.publications[publicationName])
+}
+
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
 

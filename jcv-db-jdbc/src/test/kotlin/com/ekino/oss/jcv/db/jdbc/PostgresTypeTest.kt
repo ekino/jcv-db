@@ -59,8 +59,8 @@ class PostgresTypeTest {
                     "column_numeric": 312,
                     "column_date": "2019-06-07",
                     "column_time": "17:12:28",
-                    "column_timestamp": "2019-06-06T22:00:00Z",
-                    "column_timestamptz": "2019-06-06T22:00:00Z",
+                    "column_timestamp": "{#date_time_format:iso_instant#}",
+                    "column_timestamptz": "{#date_time_format:iso_instant#}",
                     "column_interval": "0 years 0 mons 100 days 0 hours 0 mins 0.00 secs",
                     "column_json": [
                       {

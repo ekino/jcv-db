@@ -4,7 +4,6 @@ plugins {
     base
     kotlin("jvm") version "1.3.50"
     id("net.researchgate.release") version "2.8.1"
-    id("se.bjurr.gitchangelog.git-changelog-gradle-plugin") version "1.64"
 }
 
 allprojects {
@@ -58,9 +57,9 @@ subprojects {
                         }
                     }
                     scm {
-                        connection.set("scm:git:git://github.com/ekino/jcv.git")
-                        developerConnection.set("scm:git:ssh://github.com:ekino/jcv.git")
-                        url.set("https://github.com/ekino/jcv")
+                        connection.set("scm:git:git://github.com/ekino/jcv-db.git")
+                        developerConnection.set("scm:git:ssh://github.com:ekino/jcv-db.git")
+                        url.set("https://github.com/ekino/jcv-db")
                     }
                     organization {
                         name.set("ekino")

@@ -63,6 +63,10 @@ publishing {
     }
 }
 
+signing {
+    sign(publishing.publications[publicationName])
+}
+
 dependencies {
     implementation(kotlin("stdlib-jdk8", "1.3.50"))
     implementation(kotlin("test-junit", "1.3.50"))
