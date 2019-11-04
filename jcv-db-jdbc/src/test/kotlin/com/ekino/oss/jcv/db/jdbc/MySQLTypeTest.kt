@@ -291,7 +291,7 @@ class MySQLTypeTest {
               ]
         """.trimIndent()
         assertThatQuery("SELECT * FROM table_test")
-            .using(DatabaseType.MYSQL to CustomMySQLMapper())
+            .using(DatabaseType.MYSQL, CustomMySQLMapper())
             .isValidAgainst(expected)
     }
 

@@ -216,7 +216,7 @@ class MSSQLTypeTest {
                 ]
             """.trimIndent()
         assertThatTable(assertDb.table("table_test"))
-            .using(DatabaseType.MSSQL to CustomMSSQLMapper())
+            .using(DatabaseType.MSSQL, CustomMSSQLMapper())
             .isValidAgainst(expected)
     }
 

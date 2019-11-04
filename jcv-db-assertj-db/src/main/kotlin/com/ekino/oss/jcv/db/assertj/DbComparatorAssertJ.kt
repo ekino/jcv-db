@@ -39,10 +39,10 @@ class DbComparatorAssertJ(
 
     fun <T : JsonValidator<*>> using(mode: JSONCompareMode, validators: List<T>) = DbComparatorAssertJ(actual, tableConverter, JsonComparator(mode, validators))
 
-    fun <T : JsonValidator<*>> using(mode: JSONCompareMode, mapper: Pair<DatabaseType, AssertJBaseMapper>, validators: List<T>) =
+    fun <T : JsonValidator<*>> using(mode: JSONCompareMode, databaseType: DatabaseType, mapper: AssertJBaseMapper, validators: List<T>) =
         DbComparatorAssertJ(
             actual,
-            TableConverter(mapper),
+            TableConverter(databaseType to mapper),
             JsonComparator(mode, validators)
         )
 
@@ -50,9 +50,9 @@ class DbComparatorAssertJ(
 
     fun <T : JsonValidator<*>> using(validators: List<T>) = using(JSONCompareMode.STRICT, validators)
 
-    fun using(mapper: Pair<DatabaseType, AssertJBaseMapper>) = DbComparatorAssertJ(
+    fun using(databaseType: DatabaseType, mapper: AssertJBaseMapper) = DbComparatorAssertJ(
         actual,
-        TableConverter(mapper),
+        TableConverter(databaseType to mapper),
         jsonComparator
     )
 

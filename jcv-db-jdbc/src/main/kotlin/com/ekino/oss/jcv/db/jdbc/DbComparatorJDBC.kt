@@ -49,7 +49,7 @@ class DbComparatorJDBC constructor(
         DbComparatorJDBC(query, queryConverter, JsonComparator(mode, validators))
 
     fun <T : JsonValidator<*>> using(mode: JSONCompareMode, connection: Connection, validators: List<T>) =
-        DbComparatorJDBC(query, QueryConverter(connection), JsonComparator(mode, validators))
+        DbComparatorJDBC(query, QueryConverter(connection, queryConverter.customMapper), JsonComparator(mode, validators))
 
     fun <T : JsonValidator<*>> using(vararg validators: T) = using(validators.toList())
 
@@ -61,10 +61,10 @@ class DbComparatorJDBC constructor(
         jsonComparator
     )
 
-    fun using(mapper: Pair<DatabaseType, TypeMapper>) =
+    fun using(databaseType: DatabaseType, mapper: TypeMapper) =
         DbComparatorJDBC(
             query,
-            QueryConverter(queryConverter.connection, mapper),
+            QueryConverter(queryConverter.connection, databaseType to mapper),
             jsonComparator
         )
 }

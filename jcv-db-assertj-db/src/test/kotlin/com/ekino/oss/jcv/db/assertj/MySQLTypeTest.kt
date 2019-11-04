@@ -222,7 +222,7 @@ class MySQLTypeTest {
             """.trimIndent()
 
         assertThatTable(assertDb.table("table_test"))
-            .using(DatabaseType.MYSQL to CustomMySQLMapper())
+            .using(DatabaseType.MYSQL, CustomMySQLMapper())
             .isValidAgainst(expected)
     }
 

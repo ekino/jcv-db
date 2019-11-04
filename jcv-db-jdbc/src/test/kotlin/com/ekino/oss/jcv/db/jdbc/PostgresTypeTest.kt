@@ -274,7 +274,7 @@ class PostgresTypeTest {
               ]
         """.trimIndent()
         assertThatQuery("SELECT * FROM table_test")
-            .using(DatabaseType.POSTGRESQL to CustomPostgreSQLMapper())
+            .using(DatabaseType.POSTGRESQL, CustomPostgreSQLMapper())
             .isValidAgainst(expected)
     }
 

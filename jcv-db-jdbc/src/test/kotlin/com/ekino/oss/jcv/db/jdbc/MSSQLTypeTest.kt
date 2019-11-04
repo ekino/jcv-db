@@ -282,7 +282,7 @@ class MSSQLTypeTest {
               ]
         """.trimIndent()
         assertThatQuery("SELECT * FROM table_test")
-            .using(DatabaseType.MSSQL to CustomMSSQLMapper())
+            .using(DatabaseType.MSSQL, CustomMSSQLMapper())
             .isValidAgainst(expected)
     }
 

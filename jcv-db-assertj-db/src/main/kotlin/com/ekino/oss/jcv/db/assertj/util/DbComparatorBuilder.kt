@@ -47,8 +47,8 @@ class DbComparatorBuilder {
         return validators(validators.toList())
     }
 
-    fun mapper(mapper: Pair<DatabaseType, AssertJBaseMapper>): DbComparatorBuilder {
-        this.customMapper = mapper
+    fun mapper(databaseType: DatabaseType, mapper: AssertJBaseMapper): DbComparatorBuilder {
+        this.customMapper = databaseType to mapper
         return this
     }
 

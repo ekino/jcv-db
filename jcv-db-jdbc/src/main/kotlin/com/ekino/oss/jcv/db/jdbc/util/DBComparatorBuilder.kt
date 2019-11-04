@@ -53,8 +53,8 @@ class DBComparatorBuilder {
         return this
     }
 
-    fun mapper(mapper: Pair<DatabaseType, TypeMapper>): DBComparatorBuilder {
-        this.customMapper = mapper
+    fun mapper(databaseType: DatabaseType, mapper: TypeMapper): DBComparatorBuilder {
+        this.customMapper = databaseType to mapper
         return this
     }
 
