@@ -73,8 +73,8 @@ Maven
   </dependency>
   <dependency>
     <groupId>com.ekino.oss.jcv-db</groupId>
-    <artifactId>jcv-assertj-db</artifactId>
-    <version>0.0.1</version>
+    <artifactId>jcv-db-assertj-db</artifactId>
+    <version>0.0.3</version>
     <scope>test</scope>
   </dependency>
   ...
@@ -89,7 +89,7 @@ dependencies {
     testImplementation 'org.skyscreamer:jsonassert:1.5.0'
     testImplementation 'org.assertj:assertj-db:1.2.0'
     testImplementation 'com.ekino.oss.jcv:jcv-core:1.4.1'
-    testImplementation 'com.ekino.oss.jcv-db:jcv-assertj-db:0.0.1'
+    testImplementation 'com.ekino.oss.jcv-db:jcv-db-assertj-db:0.0.3'
     ...
 }
 ```
@@ -143,8 +143,8 @@ Maven
   </dependency>
   <dependency>
     <groupId>com.ekino.oss.jcv-db</groupId>
-    <artifactId>jcv-jdbc</artifactId>
-    <version>0.0.1</version>
+    <artifactId>jcv-db-jdbc</artifactId>
+    <version>0.0.3</version>
     <scope>test</scope>
   </dependency>
   ...
@@ -159,7 +159,7 @@ dependencies {
     testImplementation 'org.skyscreamer:jsonassert:1.5.0'
     testImplementation 'org.assertj:assertj-db:1.2.0'
     testImplementation 'com.ekino.oss.jcv:jcv-core:1.4.1'
-    testImplementation 'com.ekino.oss.jcv-db:jcv-jdbc:0.0.1'
+    testImplementation 'com.ekino.oss.jcv-db:jcv-db-jdbc:0.0.3'
     ...
 }
 ```
@@ -214,8 +214,8 @@ Maven
   </dependency>
   <dependency>
     <groupId>com.ekino.oss.jcv-db</groupId>
-    <artifactId>jcv-cassandra</artifactId>
-    <version>0.0.1</version>
+    <artifactId>jcv-db-cassandra</artifactId>
+    <version>0.0.3</version>
     <scope>test</scope>
   </dependency>
   ...
@@ -230,7 +230,7 @@ dependencies {
     testImplementation 'org.skyscreamer:jsonassert:1.5.0'
     testImplementation 'org.assertj:assertj-db:1.2.0'
     testImplementation 'com.ekino.oss.jcv:jcv-core:1.4.1'
-    testImplementation 'com.ekino.oss.jcv-db:jcv-cassandra:0.0.1'
+    testImplementation 'com.ekino.oss.jcv-db:jcv-db-cassandra:0.0.3'
     ...
 }
 ```
@@ -285,8 +285,8 @@ Maven
   </dependency>
   <dependency>
     <groupId>com.ekino.oss.jcv-db</groupId>
-    <artifactId>jcv-mongo</artifactId>
-    <version>0.0.1</version>
+    <artifactId>jcv-db-mongo</artifactId>
+    <version>0.0.3</version>
     <scope>test</scope>
   </dependency>
   ...
@@ -301,7 +301,7 @@ dependencies {
     testImplementation 'org.skyscreamer:jsonassert:1.5.0'
     testImplementation 'org.assertj:assertj-db:1.2.0'
     testImplementation 'com.ekino.oss.jcv:jcv-core:1.4.1'
-    testImplementation 'com.ekino.oss.jcv-db:jcv-mongo:0.0.1'
+    testImplementation 'com.ekino.oss.jcv-db:jcv-db-mongo:0.0.1'
     ...
 }
 ```
