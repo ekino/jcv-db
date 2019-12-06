@@ -3,9 +3,8 @@ package com.ekino.oss.jcv.db.jdbc.util
 import com.ekino.oss.jcv.core.JsonComparator
 import com.ekino.oss.jcv.core.JsonValidator
 import com.ekino.oss.jcv.db.config.DBValidators
-import com.ekino.oss.jcv.db.config.DatabaseType
 import com.ekino.oss.jcv.db.jdbc.DbComparatorJDBC
-import com.ekino.oss.jcv.db.mapper.TypeMapper
+import com.ekino.oss.jcv.db.jdbc.mapper.JDBCMapper
 import org.skyscreamer.jsonassert.JSONCompareMode
 import java.sql.Connection
 
@@ -24,7 +23,7 @@ class DBComparatorBuilder {
     private lateinit var mode: JSONCompareMode
     private lateinit var validators: List<JsonValidator<*>>
     private var connection: Connection? = null
-    private var customMapper: Pair<DatabaseType, TypeMapper>? = null
+    private var customMapper: JDBCMapper? = null
 
     companion object {
         @JvmStatic
@@ -53,17 +52,18 @@ class DBComparatorBuilder {
         return this
     }
 
-    fun mapper(databaseType: DatabaseType, mapper: TypeMapper): DBComparatorBuilder {
-        this.customMapper = databaseType to mapper
+    fun mapper(mapper: JDBCMapper): DBComparatorBuilder {
+        this.customMapper = mapper
         return this
     }
 
     fun build(query: String) = DbComparatorJDBC(
         query,
-        QueryConverter(connection, customMapper),
+        QueryConverter(connection),
         JsonComparator(
             mode,
             validators
-        )
+        ),
+        customMapper
     )
 }

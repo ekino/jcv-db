@@ -4,9 +4,9 @@ import com.ekino.oss.jcv.core.JsonComparator
 import com.ekino.oss.jcv.core.JsonValidator
 import com.ekino.oss.jcv.db.assertj.exception.JsonParseException
 import com.ekino.oss.jcv.db.assertj.mapper.AssertJBaseMapper
+import com.ekino.oss.jcv.db.assertj.util.ComparatorUtil.Companion.convertTableToTableModel
+import com.ekino.oss.jcv.db.assertj.util.ComparatorUtil.Companion.getMapperByDbType
 import com.ekino.oss.jcv.db.assertj.util.DbComparatorBuilder
-import com.ekino.oss.jcv.db.assertj.util.TableConverter
-import com.ekino.oss.jcv.db.config.DatabaseType
 import com.ekino.oss.jcv.db.exception.DbAssertException
 import com.ekino.oss.jcv.db.util.JsonConverter
 import com.ekino.oss.jcv.db.util.JsonConverter.compareJsonAndLogResult
@@ -23,8 +23,8 @@ import java.util.Objects
 
 class DbComparatorAssertJ(
     actualTable: Table,
-    private val tableConverter: TableConverter,
-    private val jsonComparator: JsonComparator
+    private val jsonComparator: JsonComparator,
+    private val mapper: AssertJBaseMapper? = null
 ) : AbstractAssert<DbComparatorAssertJ, Table>(actualTable, DbComparatorAssertJ::class.java) {
 
     companion object {
@@ -33,27 +33,27 @@ class DbComparatorAssertJ(
         fun assertThatTable(table: Table) = DbComparatorBuilder.create().build(table)
     }
 
-    fun using(comparator: JsonComparator) = DbComparatorAssertJ(actual, tableConverter, comparator)
+    fun using(comparator: JsonComparator) = DbComparatorAssertJ(actual, comparator)
 
     fun <T : JsonValidator<*>> using(mode: JSONCompareMode, vararg validators: T) = using(mode, validators.toList())
 
-    fun <T : JsonValidator<*>> using(mode: JSONCompareMode, validators: List<T>) = DbComparatorAssertJ(actual, tableConverter, JsonComparator(mode, validators))
+    fun <T : JsonValidator<*>> using(mode: JSONCompareMode, validators: List<T>) = DbComparatorAssertJ(actual, JsonComparator(mode, validators))
 
-    fun <T : JsonValidator<*>> using(mode: JSONCompareMode, databaseType: DatabaseType, mapper: AssertJBaseMapper, validators: List<T>) =
+    fun <T : JsonValidator<*>> using(mode: JSONCompareMode, mapper: AssertJBaseMapper, validators: List<T>) =
         DbComparatorAssertJ(
             actual,
-            TableConverter(databaseType to mapper),
-            JsonComparator(mode, validators)
+            JsonComparator(mode, validators),
+            mapper
         )
 
     fun <T : JsonValidator<*>> using(vararg validators: T) = using(validators.toList())
 
     fun <T : JsonValidator<*>> using(validators: List<T>) = using(JSONCompareMode.STRICT, validators)
 
-    fun using(databaseType: DatabaseType, mapper: AssertJBaseMapper) = DbComparatorAssertJ(
+    fun using(mapper: AssertJBaseMapper) = DbComparatorAssertJ(
         actual,
-        TableConverter(databaseType to mapper),
-        jsonComparator
+        jsonComparator,
+        mapper
     )
 
     fun isValidAgainst(input: String) = input.takeIfIsJson()?.let { compareActualAndExcepted(it as JSONArray) } ?: throw DbAssertException(
@@ -68,7 +68,7 @@ class DbComparatorAssertJ(
 
         Objects.requireNonNull<Any>(jsonComparator, "Json comparator definition is missing")
 
-        val actualJson = getTableModelAsJson(tableConverter.convertTableToTableModel(actual), tableConverter.getMapperByDbType(actual.source, actual.dataSource))
+        val actualJson = getTableModelAsJson(convertTableToTableModel(actual), mapper ?: getMapperByDbType(actual.source, actual.dataSource))
 
         try {
             compareJsonAndLogResult(actualJson, expected, jsonComparator)

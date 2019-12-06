@@ -12,9 +12,7 @@ import com.ekino.oss.jcv.db.model.RowModel
 import com.ekino.oss.jcv.db.model.TableModel
 import java.sql.Connection
 
-class QueryConverter(val connection: Connection? = null, val customMapper: Pair<DatabaseType, TypeMapper>? = null) {
-
-    private val mappers: Map<DatabaseType, TypeMapper> = customMapper?.let { defaultMappers.plus(customMapper) } ?: defaultMappers
+class QueryConverter(val connection: Connection? = null) {
 
     companion object {
         val defaultMappers: Map<DatabaseType, TypeMapper> = mapOf(
@@ -42,7 +40,7 @@ class QueryConverter(val connection: Connection? = null, val customMapper: Pair<
 
     fun getMapperByType(): TypeMapper = getMapperByDbType(connection?.metaData?.databaseProductName ?: throw DbAssertException("You have to define a connection"))
 
-    private fun getMapperByDbType(dbType: String) = mappers
+    private fun getMapperByDbType(dbType: String) = defaultMappers
         .filter { it.key == getDatabaseTypeByProductName(dbType) }
         .map { it.value }
         .firstOrNull() ?: DefaultMapper()

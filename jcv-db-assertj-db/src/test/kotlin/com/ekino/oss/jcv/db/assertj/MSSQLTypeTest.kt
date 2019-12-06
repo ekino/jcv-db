@@ -6,7 +6,6 @@ import com.ekino.oss.jcv.core.validator.validator
 import com.ekino.oss.jcv.db.assertj.DbComparatorAssertJ.Companion.assertThatTable
 import com.ekino.oss.jcv.db.assertj.extension.AssertDbExtension
 import com.ekino.oss.jcv.db.assertj.extension.KMSSQLContainer
-import com.ekino.oss.jcv.db.config.DatabaseType
 import org.assertj.db.type.Table
 import org.assertj.db.type.Value
 import org.junit.jupiter.api.BeforeEach
@@ -216,7 +215,7 @@ class MSSQLTypeTest {
                 ]
             """.trimIndent()
         assertThatTable(assertDb.table("table_test"))
-            .using(DatabaseType.MSSQL, CustomMSSQLMapper())
+            .using(CustomMSSQLMapper())
             .isValidAgainst(expected)
     }
 

@@ -5,7 +5,6 @@ import com.ekino.oss.jcv.core.JsonValidator
 import com.ekino.oss.jcv.db.assertj.DbComparatorAssertJ
 import com.ekino.oss.jcv.db.assertj.mapper.AssertJBaseMapper
 import com.ekino.oss.jcv.db.config.DBValidators
-import com.ekino.oss.jcv.db.config.DatabaseType
 import org.assertj.db.type.Table
 import org.skyscreamer.jsonassert.JSONCompareMode
 
@@ -23,7 +22,7 @@ class DbComparatorBuilder {
 
     private lateinit var mode: JSONCompareMode
     private lateinit var validators: List<JsonValidator<*>>
-    private var customMapper: Pair<DatabaseType, AssertJBaseMapper>? = null
+    private var customMapper: AssertJBaseMapper? = null
 
     companion object {
         @JvmStatic
@@ -47,17 +46,17 @@ class DbComparatorBuilder {
         return validators(validators.toList())
     }
 
-    fun mapper(databaseType: DatabaseType, mapper: AssertJBaseMapper): DbComparatorBuilder {
-        this.customMapper = databaseType to mapper
+    fun mapper(mapper: AssertJBaseMapper): DbComparatorBuilder {
+        this.customMapper = mapper
         return this
     }
 
     fun build(table: Table) = DbComparatorAssertJ(
         table,
-        TableConverter(customMapper),
         JsonComparator(
             mode,
             validators
-        )
+        ),
+        customMapper
     )
 }
