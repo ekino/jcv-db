@@ -3,7 +3,6 @@ package com.ekino.oss.jcv.db.jdbc
 import com.ekino.oss.jcv.core.JsonValidator
 import com.ekino.oss.jcv.core.validator.comparator
 import com.ekino.oss.jcv.core.validator.validator
-import com.ekino.oss.jcv.db.config.DatabaseType
 import com.ekino.oss.jcv.db.jdbc.extension.KMySQLContainer
 import com.ekino.oss.jcv.db.jdbc.mapper.MySQLMapper
 import com.ekino.oss.jcv.db.jdbc.util.DBComparatorBuilder
@@ -291,7 +290,7 @@ class MySQLTypeTest {
               ]
         """.trimIndent()
         assertThatQuery("SELECT * FROM table_test")
-            .using(DatabaseType.MYSQL, CustomMySQLMapper())
+            .using(CustomMySQLMapper())
             .isValidAgainst(expected)
     }
 

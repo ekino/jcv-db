@@ -2,11 +2,10 @@ package com.ekino.oss.jcv.db.jdbc
 
 import com.ekino.oss.jcv.core.JsonComparator
 import com.ekino.oss.jcv.core.JsonValidator
-import com.ekino.oss.jcv.db.config.DatabaseType
 import com.ekino.oss.jcv.db.exception.DbAssertException
+import com.ekino.oss.jcv.db.jdbc.mapper.JDBCMapper
 import com.ekino.oss.jcv.db.jdbc.util.DBComparatorBuilder
 import com.ekino.oss.jcv.db.jdbc.util.QueryConverter
-import com.ekino.oss.jcv.db.mapper.TypeMapper
 import com.ekino.oss.jcv.db.util.JsonConverter
 import com.ekino.oss.jcv.db.util.JsonConverter.compareJsonAndLogResult
 import com.ekino.oss.jcv.db.util.JsonConverter.getTableModelAsJson
@@ -20,7 +19,8 @@ import java.sql.Connection
 class DbComparatorJDBC constructor(
     private val query: String,
     private val queryConverter: QueryConverter,
-    private val jsonComparator: JsonComparator
+    private val jsonComparator: JsonComparator,
+    private val customMapper: JDBCMapper? = null
 ) {
 
     companion object {
@@ -35,21 +35,16 @@ class DbComparatorJDBC constructor(
     @Throws(IOException::class)
     fun isValidAgainst(inputStream: InputStream) = compareActualAndExcepted(JsonConverter.loadJson(inputStream))
 
-    private fun compareActualAndExcepted(expected: JSONArray) {
-        val actualJson = getTableModelAsJson(queryConverter.fromQueryToTableModel(query), queryConverter.getMapperByType())
-        compareJsonAndLogResult(actualJson, expected, jsonComparator)
-    }
-
     fun using(comparator: JsonComparator) =
-        DbComparatorJDBC(query, queryConverter, comparator)
+        DbComparatorJDBC(query, queryConverter, comparator, customMapper)
 
     fun <T : JsonValidator<*>> using(mode: JSONCompareMode, vararg validators: T) = using(mode, validators.toList())
 
     fun <T : JsonValidator<*>> using(mode: JSONCompareMode, validators: List<T>) =
-        DbComparatorJDBC(query, queryConverter, JsonComparator(mode, validators))
+        DbComparatorJDBC(query, queryConverter, JsonComparator(mode, validators), customMapper)
 
     fun <T : JsonValidator<*>> using(mode: JSONCompareMode, connection: Connection, validators: List<T>) =
-        DbComparatorJDBC(query, QueryConverter(connection, queryConverter.customMapper), JsonComparator(mode, validators))
+        DbComparatorJDBC(query, QueryConverter(connection), JsonComparator(mode, validators), customMapper)
 
     fun <T : JsonValidator<*>> using(vararg validators: T) = using(validators.toList())
 
@@ -57,14 +52,21 @@ class DbComparatorJDBC constructor(
 
     fun using(connection: Connection) = DbComparatorJDBC(
         query,
-        QueryConverter(connection, queryConverter.customMapper),
-        jsonComparator
+        QueryConverter(connection),
+        jsonComparator,
+        customMapper
     )
 
-    fun using(databaseType: DatabaseType, mapper: TypeMapper) =
+    fun using(mapper: JDBCMapper) =
         DbComparatorJDBC(
             query,
-            QueryConverter(queryConverter.connection, databaseType to mapper),
-            jsonComparator
+            QueryConverter(queryConverter.connection),
+            jsonComparator,
+            mapper
         )
+
+    private fun compareActualAndExcepted(expected: JSONArray) {
+        val actualJson = getTableModelAsJson(queryConverter.fromQueryToTableModel(query), customMapper ?: queryConverter.getMapperByType())
+        compareJsonAndLogResult(actualJson, expected, jsonComparator)
+    }
 }

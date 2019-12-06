@@ -7,7 +7,6 @@ import com.ekino.oss.jcv.db.assertj.DbComparatorAssertJ.Companion.assertThatTabl
 import com.ekino.oss.jcv.db.assertj.extension.AssertDbExtension
 import com.ekino.oss.jcv.db.assertj.extension.KPostgreSQLContainer
 import com.ekino.oss.jcv.db.assertj.mapper.PostgresMapper
-import com.ekino.oss.jcv.db.config.DatabaseType
 import org.assertj.db.type.Table
 import org.assertj.db.type.Value
 import org.junit.jupiter.api.BeforeEach
@@ -203,7 +202,7 @@ class PostgresTypeTest {
             """.trimIndent()
 
         assertThatTable(assertDb.table("table_test"))
-            .using(DatabaseType.POSTGRESQL, CustomPostgreSQLMapper())
+            .using(CustomPostgreSQLMapper())
             .isValidAgainst(expected)
     }
 
