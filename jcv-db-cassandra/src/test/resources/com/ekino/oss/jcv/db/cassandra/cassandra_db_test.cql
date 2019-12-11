@@ -96,3 +96,17 @@ INSERT INTO cassandratest.cassandra_table_type (
                                                                 [{ test_field_int : 1, test_type: [{ test_field_int : 1, test_field_text: 'test'}]}],
                                                                 null
                                                                );
+
+CREATE TABLE cassandratest.table_test (
+    content text,
+    criteria_number int,
+    id UUID,
+    PRIMARY KEY (content, criteria_number)
+);
+
+INSERT INTO cassandratest.table_test (content, criteria_number, id) VALUES ('content 1', 1, d8a32fff-13a5-4db6-9c2c-111bee329575);
+INSERT INTO cassandratest.table_test (content, criteria_number, id) VALUES ('content 1', 2, 607bd08a-269f-42a0-90e9-bc8e4da11357);
+INSERT INTO cassandratest.table_test (content, criteria_number, id) VALUES ('content 1', 3, dbeb9161-cf55-4008-a233-9df257a418c3);
+INSERT INTO cassandratest.table_test (content, criteria_number, id) VALUES ('content 2', 3, a98ea4bb-5bc4-421a-bb09-85d6bf91a190);
+INSERT INTO cassandratest.table_test (content, criteria_number, id) VALUES ('content 2', 4, defff40b-5982-4823-b8f4-6f030cd93df1);
+

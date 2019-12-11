@@ -1,7 +1,9 @@
 package com.ekino.oss.jcv.db.mongo
 
+import com.mongodb.BasicDBObject
 import com.mongodb.MongoClient
 import com.mongodb.client.model.Filters.eq
+import com.mongodb.client.model.Sorts.descending
 import org.bson.Document
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
@@ -195,5 +197,75 @@ class MongoAssertDB {
             """.trimIndent()
 
         DbComparatorMongo.assertThatCollection(database.getCollection("testCollection").find(eq("name", "test-mongo-db-4")).first()).isValidAgainst(expected)
+    }
+
+    @Test
+    fun `Should assert request with field restriction`() {
+        val mongoClient = MongoClient(mongoContainer.containerIpAddress, mongoContainer.getMappedPort(27017))
+        val database = mongoClient.getDatabase("test")
+
+        val expected = // language=json
+            """
+                [
+                  {
+                    "name": "test-mongo-db",
+                    "_id": "{#mongo_id#}"
+                  },
+                  {
+                    "name": "test-mongo-db-2",
+                    "_id": "{#mongo_id#}"
+                  },
+                  {
+                    "name": "test-mongo-db-3",
+                    "_id": "{#mongo_id#}"
+                  },
+                  {
+                    "name": "test-mongo-db-4",
+                    "_id": "{#mongo_id#}"
+                  }
+                ]
+            """.trimIndent()
+
+        DbComparatorMongo.assertThatCollection(database.getCollection("testCollection").find().projection(BasicDBObject("name", true))).isValidAgainst(expected)
+    }
+
+    @Test
+    fun `Should assert request with ordering`() {
+        val mongoClient = MongoClient(mongoContainer.containerIpAddress, mongoContainer.getMappedPort(27017))
+        val database = mongoClient.getDatabase("test")
+
+        val expected = // language=json
+            """
+                [
+                  {
+                    "name": "test-mongo-db-4",
+                    "json-array": [
+                      { 
+                        "name": "test-name",
+                        "null-field": null
+                      }
+                    ],
+                    "_id": "{#mongo_id#}"
+                  },
+                  {
+                    "name": "test-mongo-db-3",
+                    "json-object": { 
+                      "name": "test-json-object-field",
+                      "json-object": { "name": "test-json-object-field" }
+                    },
+                    "_id": "{#mongo_id#}"
+                  },
+                  {
+                    "name": "test-mongo-db-2",
+                    "_id": "{#mongo_id#}"
+                  },
+                  {
+                    "name": "test-mongo-db",
+                    "_id": "{#mongo_id#}"
+                  }
+                ]
+            """.trimIndent()
+
+        DbComparatorMongo.assertThatCollection(database.getCollection("testCollection").find().sort(descending("name"))).isValidAgainst(expected)
     }
 }

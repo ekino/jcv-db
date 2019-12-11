@@ -169,4 +169,64 @@ class DbComparatorCassandraTest {
                 ))
             .isValidAgainst(expected)
     }
+
+    @Test
+    fun `Should test column restriction with cql query`() {
+        val expected = // language=json
+            """[
+                  {
+                      "criteria_number": 1,
+                      "content": "content 1",
+                      "id": "d8a32fff-13a5-4db6-9c2c-111bee329575"
+                  },
+                  {
+                      "criteria_number": 2,
+                      "content": "content 1",
+                      "id": "607bd08a-269f-42a0-90e9-bc8e4da11357"
+                  },
+                  {
+                      "criteria_number": 3,
+                      "content": "content 1",
+                      "id": "dbeb9161-cf55-4008-a233-9df257a418c3"
+                  }
+            ]""".trimIndent()
+
+        DbComparatorCassandra.assertThatQuery("SELECT * FROM cassandratest.table_test WHERE content = 'content 1';")
+            .using(CassandraDataSource(
+                cassandraContainer.envMap["CASSANDRA_DC"] ?: "",
+                cassandraContainer.containerIpAddress,
+                cassandraContainer.getMappedPort(CassandraContainer.CQL_PORT)
+            ))
+            .isValidAgainst(expected)
+    }
+
+    @Test
+    fun `Should test column ordering with cql query`() {
+        val expected = // language=json
+            """[
+                  {
+                      "criteria_number": 3,
+                      "content": "content 1",
+                      "id": "dbeb9161-cf55-4008-a233-9df257a418c3"
+                  },
+                  {
+                      "criteria_number": 2,
+                      "content": "content 1",
+                      "id": "607bd08a-269f-42a0-90e9-bc8e4da11357"
+                  },
+                  {
+                      "criteria_number": 1,
+                      "content": "content 1",
+                      "id": "d8a32fff-13a5-4db6-9c2c-111bee329575"
+                  }
+            ]""".trimIndent()
+
+        DbComparatorCassandra.assertThatQuery("SELECT * FROM cassandratest.table_test WHERE content = 'content 1' ORDER BY criteria_number DESC;")
+            .using(CassandraDataSource(
+                cassandraContainer.envMap["CASSANDRA_DC"] ?: "",
+                cassandraContainer.containerIpAddress,
+                cassandraContainer.getMappedPort(CassandraContainer.CQL_PORT)
+            ))
+            .isValidAgainst(expected)
+    }
 }
