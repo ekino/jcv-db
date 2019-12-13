@@ -14,13 +14,13 @@ allprojects {
         jcenter()
     }
 
-    project.extra.set("jcv-core.version", "1.4.1")
+    project.extra.set("jcv-core.version", "1.4.2")
     project.extra.set("jsonassert.version", "1.5.0")
-    project.extra.set("postgre.version", "42.2.8")
+    project.extra.set("postgres.version", "42.2.9")
     project.extra.set("mssql.version", "7.4.1.jre8")
-    project.extra.set("mysql.version", "8.0.17")
-    project.extra.set("junit.version", "5.5.1")
-    project.extra.set("testcontainers.version", "1.12.1")
+    project.extra.set("mysql.version", "8.0.18")
+    project.extra.set("junit.version", "5.5.2")
+    project.extra.set("testcontainers.version", "1.12.4")
 }
 
 tasks.create("printVersion") {

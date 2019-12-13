@@ -60,7 +60,7 @@ class PostgresTypeTest {
                     "column_time": "17:12:28",
                     "column_timestamp": "{#date_time_format:iso_instant#}",
                     "column_timestamptz": "{#date_time_format:iso_instant#}",
-                    "column_interval": "0 years 0 mons 100 days 0 hours 0 mins 0.00 secs",
+                    "column_interval": "0 years 0 mons 100 days 0 hours 0 mins 0.0 secs",
                     "column_json": [
                       {
                         "key": "Hello World !"

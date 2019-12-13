@@ -80,13 +80,13 @@ dependencies {
     implementation(group = "org.skyscreamer", name = "jsonassert", version = "${project.extra["jsonassert.version"]}")
     implementation(group = "org.json", name = "json", version = "20190722")
     implementation(group = "commons-io", name = "commons-io", version = "2.6")
-    implementation(group = "com.fasterxml.jackson.core", name = "jackson-databind", version = "2.10.0")
+    implementation(group = "com.fasterxml.jackson.core", name = "jackson-databind", version = "2.10.1")
 
     implementation(group = "org.locationtech.jts", name = "jts-core", version =  "1.16.1")
 
     testImplementation(group = "org.junit.jupiter", name = "junit-jupiter", version = "${project.extra["junit.version"]}")
 
-    testImplementation(group = "com.willowtreeapps.assertk", name = "assertk-jvm", version = "0.19") {
+    testImplementation(group = "com.willowtreeapps.assertk", name = "assertk-jvm", version = "0.20") {
         exclude(group = "org.jetbrains.kotlin", module = "kotlin-reflect")
     }
 }
