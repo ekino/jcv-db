@@ -16,15 +16,14 @@ configurations {
     }
 }
 
-val sourcesJar by tasks.registering(Jar::class) {
-    archiveClassifier.set("sources")
-    from(sourceSets.main.get().allJava)
-}
-
 val javadocJar by tasks.registering(Jar::class) {
     dependsOn("dokka")
     archiveClassifier.set("javadoc")
     from(buildDir.resolve("dokka"))
+}
+
+java {
+    withSourcesJar()
 }
 
 tasks {
@@ -41,11 +40,17 @@ tasks {
 
     withType<DokkaTask> {
         reportUndocumented = false
+    }    
+
+    val version: String by project
+    if (version.endsWith("-SNAPSHOT")) {
+        withType<GenerateModuleMetadata>().configureEach {
+            enabled = false
+        }
     }
 
     artifacts {
         archives(jar)
-        archives(sourcesJar)
         archives(javadocJar)
     }
 }
@@ -55,9 +60,8 @@ val publicationName = "mavenJava"
 publishing {
     publications {
         named<MavenPublication>(publicationName) {
-            artifact(sourcesJar.get())
             artifact(javadocJar.get())
-
+            
             from(components["java"])
         }
     }
