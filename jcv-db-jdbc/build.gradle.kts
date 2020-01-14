@@ -78,11 +78,11 @@ dependencies {
     implementation(group = "com.ekino.oss.jcv", name = "jcv-core", version = "${project.extra["jcv-core.version"]}")
     implementation(group = "org.skyscreamer", name = "jsonassert", version = "${project.extra["jsonassert.version"]}")
 
-    implementation(group = "org.postgresql", name = "postgresql", version = "${project.extra["postgre.version"]}")
+    implementation(group = "org.postgresql", name = "postgresql", version = "${project.extra["postgres.version"]}")
     implementation(group = "com.microsoft.sqlserver", name = "mssql-jdbc", version = "${project.extra["mssql.version"]}")
     implementation(group = "mysql", name = "mysql-connector-java", version = "${project.extra["mysql.version"]}")
-    implementation(group = "org.springframework", name = "spring-jdbc", version = "5.2.0.RELEASE")
-    implementation(group = "com.fasterxml.jackson.core", name = "jackson-databind", version = "2.10.0")
+    implementation(group = "org.springframework", name = "spring-jdbc", version = "5.2.2.RELEASE")
+    implementation(group = "com.fasterxml.jackson.core", name = "jackson-databind", version = "2.10.1")
 
     testImplementation(group = "org.junit.jupiter", name = "junit-jupiter", version = "${project.extra["junit.version"]}")
     testImplementation(group = "org.testcontainers", name = "junit-jupiter", version = "${project.extra["testcontainers.version"]}")
@@ -90,5 +90,5 @@ dependencies {
     testImplementation(group = "org.testcontainers", name = "postgresql", version = "${project.extra["testcontainers.version"]}")
     testImplementation(group = "org.testcontainers", name = "mysql", version = "${project.extra["testcontainers.version"]}")
     testImplementation(group = "org.testcontainers", name = "mssqlserver", version = "${project.extra["testcontainers.version"]}")
-    testImplementation(group = "org.assertj", name = "assertj-core", version = "3.9.1")
+    testImplementation(group = "org.assertj", name = "assertj-core", version = "3.14.0")
 }

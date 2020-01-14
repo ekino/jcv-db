@@ -78,13 +78,13 @@ dependencies {
     implementation(group = "com.ekino.oss.jcv", name = "jcv-core", version = "${project.extra["jcv-core.version"]}")
     implementation(group = "org.skyscreamer", name = "jsonassert", version = "${project.extra["jsonassert.version"]}")
 
-    implementation("org.mongodb:mongo-java-driver:3.4.3")
+    implementation("org.mongodb:mongo-java-driver:3.12.0")
 
     testImplementation(group = "org.junit.jupiter", name = "junit-jupiter", version = "${project.extra["junit.version"]}")
     testImplementation(group = "org.testcontainers", name = "junit-jupiter", version = "${project.extra["testcontainers.version"]}")
     testImplementation(group = "org.testcontainers", name = "testcontainers", version = "${project.extra["testcontainers.version"]}")
 
-    testImplementation(group = "com.willowtreeapps.assertk", name = "assertk-jvm", version = "0.19") {
+    testImplementation(group = "com.willowtreeapps.assertk", name = "assertk-jvm", version = "0.20") {
         exclude(group = "org.jetbrains.kotlin", module = "kotlin-reflect")
     }
 }
