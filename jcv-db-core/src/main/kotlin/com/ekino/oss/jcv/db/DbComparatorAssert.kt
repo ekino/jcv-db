@@ -6,10 +6,8 @@ import com.ekino.oss.jcv.db.exception.DbAssertException
 import com.ekino.oss.jcv.db.model.RowModel
 import com.ekino.oss.jcv.db.model.TableModel
 import com.ekino.oss.jcv.db.util.JsonConverter
-import com.ekino.oss.jcv.db.util.takeIfIsJson
 import org.json.JSONArray
 import org.skyscreamer.jsonassert.JSONCompareMode
-import java.io.IOException
 import java.io.InputStream
 
 class DbComparatorAssert(private val actualJson: JSONArray, private val jsonComparator: JsonComparator) {
@@ -34,12 +32,11 @@ class DbComparatorAssert(private val actualJson: JSONArray, private val jsonComp
         }
     }
 
-    fun isValidAgainst(input: String) = input.takeIfIsJson()?.let { compareActualAndExcepted(it as JSONArray) } ?: throw DbAssertException(
-        "Unable to parse pg object to json"
+    fun isValidAgainst(input: String) = JsonConverter.formatInput(input)?.let { compareActualAndExcepted(it) } ?: throw DbAssertException(
+        "Unable to parse expected result from string to json"
     )
 
-    @Throws(IOException::class)
-    fun isValidAgainst(inputStream: InputStream) = compareActualAndExcepted(JsonConverter.loadJson(inputStream))
+    fun isValidAgainst(inputStream: InputStream) = isValidAgainst(JsonConverter.loadFileAsString(inputStream))
 
     private fun compareActualAndExcepted(expected: JSONArray) {
         JsonConverter.compareJsonAndLogResult(actualJson, expected, jsonComparator)

@@ -2,15 +2,15 @@ package com.ekino.oss.jcv.db.util
 
 import assertk.assertThat
 import assertk.assertions.isEqualTo
-import assertk.assertions.isFailure
 import assertk.assertions.isNull
 import com.ekino.oss.jcv.db.mapper.TypeMapper
 import com.ekino.oss.jcv.db.model.RowModel
 import com.ekino.oss.jcv.db.model.TableModel
-import com.ekino.oss.jcv.db.util.JsonConverter.loadJson
+import com.ekino.oss.jcv.db.util.JsonConverter.formatInput
 import org.json.JSONArray
 import org.json.JSONObject
 import org.junit.jupiter.api.Test
+import java.io.BufferedReader
 
 class JsonConverterTest {
 
@@ -31,18 +31,22 @@ class JsonConverterTest {
 
     @Test
     fun `Should load file and return a json array`() {
-        val expectedJsonArray = JSONArray("""[{ "id" : 1 }]""")
-        assertThat(loadJson(this::class.java.classLoader.getResourceAsStream("test-file.json")!!).toString()).isEqualTo(expectedJsonArray.toString())
+        val expectedResult = JSONArray("""[{"id":1}]""")
+        val inputString = this::class.java.classLoader.getResourceAsStream("test-file.json")!!.bufferedReader().use(BufferedReader::readText)
+        assertThat(formatInput(inputString).toString()).isEqualTo(expectedResult.toString())
     }
 
     @Test
     fun `Should get an error when trying to load a json object`() {
-        assertThat { loadJson(this::class.java.classLoader.getResourceAsStream("test-file-object.json")!!) }.isFailure()
+        val expectedResult = JSONArray("""[{"id":1}]""")
+        val inputString = this::class.java.classLoader.getResourceAsStream("test-file-object.json")!!.bufferedReader().use(BufferedReader::readText)
+        assertThat(formatInput(inputString).toString()).isEqualTo(expectedResult.toString())
     }
 
     @Test
     fun `Should get an error when trying to load an invalid json`() {
-        assertThat { loadJson(this::class.java.classLoader.getResourceAsStream("test-file-invalid.json")!!) }.isFailure()
+        val inputString = this::class.java.classLoader.getResourceAsStream("test-file-invalid.json")!!.bufferedReader().use(BufferedReader::readText)
+        assertThat(formatInput(inputString)).isNull()
     }
 
     @Test

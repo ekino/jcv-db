@@ -326,6 +326,21 @@ class MySQLTypeTest {
             .isValidAgainst(expected)
     }
 
+    @Test
+    fun `Should valid single row against json object`() {
+        val expected = // language=json
+            """
+              {
+                "id": 1234,
+                "criteria_number": 0,
+                "content": "content 1"
+              }
+        """.trimIndent()
+
+        assertThatQuery("SELECT * FROM table_test WHERE id=1234")
+            .isValidAgainst(expected)
+    }
+
     private fun customValidator(): JsonValidator<String> {
         return validator {
             templatedValidator<String>("custom_notempty", comparator { actual, expected ->

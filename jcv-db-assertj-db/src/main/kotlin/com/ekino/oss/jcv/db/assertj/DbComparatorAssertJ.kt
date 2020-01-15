@@ -16,14 +16,13 @@ import com.ekino.oss.jcv.db.model.TableModel
 import com.ekino.oss.jcv.db.util.ConverterUtil
 import com.ekino.oss.jcv.db.util.JsonConverter
 import com.ekino.oss.jcv.db.util.JsonConverter.compareJsonAndLogResult
-import com.ekino.oss.jcv.db.util.takeIfIsJson
+import com.ekino.oss.jcv.db.util.JsonConverter.formatInput
 import org.assertj.core.api.AbstractAssert
 import org.assertj.db.type.Source
 import org.assertj.db.type.Table
 import org.json.JSONArray
 import org.json.JSONException
 import org.skyscreamer.jsonassert.JSONCompareMode
-import java.io.IOException
 import java.io.InputStream
 import java.sql.DriverManager
 import java.util.HashMap
@@ -65,12 +64,11 @@ class DbComparatorAssertJ(
         mapper
     )
 
-    fun isValidAgainst(input: String) = input.takeIfIsJson()?.let { compareActualAndExcepted(it as JSONArray) } ?: throw DbAssertException(
-        "Unable to parse pg object to json"
+    fun isValidAgainst(input: String) = formatInput(input)?.let { compareActualAndExcepted(it) } ?: throw DbAssertException(
+        "Unable to parse expected result from string to json"
     )
 
-    @Throws(IOException::class)
-    fun isValidAgainst(inputStream: InputStream) = compareActualAndExcepted(JsonConverter.loadJson(inputStream))
+    fun isValidAgainst(inputStream: InputStream) = isValidAgainst(JsonConverter.loadFileAsString(inputStream))
 
     private fun compareActualAndExcepted(expected: JSONArray) {
         isNotNull

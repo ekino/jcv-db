@@ -7,12 +7,10 @@ import com.ekino.oss.jcv.db.mongo.util.DBComparatorBuilder
 import com.ekino.oss.jcv.db.mongo.util.MongoConverter
 import com.ekino.oss.jcv.db.util.JsonConverter
 import com.ekino.oss.jcv.db.util.JsonConverter.compareJsonAndLogResult
-import com.ekino.oss.jcv.db.util.takeIfIsJson
 import com.mongodb.client.FindIterable
 import org.bson.Document
 import org.json.JSONArray
 import org.skyscreamer.jsonassert.JSONCompareMode
-import java.io.IOException
 import java.io.InputStream
 
 class DbComparatorMongo(
@@ -27,15 +25,14 @@ class DbComparatorMongo(
         fun assertThatCollection(collection: FindIterable<Document>) = DBComparatorBuilder.create().build(collection)
 
         @JvmStatic
-        fun assertThatCollection(document: Document) = DBComparatorBuilder.create().build(document)
+        fun assertThatCollection(document: Document?) = document?.let { DBComparatorBuilder.create().build(it) } ?: throw DbAssertException("Mongo document is null")
     }
 
-    fun isValidAgainst(input: String) = input.takeIfIsJson()?.let { compareActualAndExcepted(it as JSONArray) } ?: throw DbAssertException(
-        "Unable to parse expected result from string to json array"
+    fun isValidAgainst(input: String) = JsonConverter.formatInput(input)?.let { compareActualAndExcepted(it) } ?: throw DbAssertException(
+        "Unable to parse expected result from string to json"
     )
 
-    @Throws(IOException::class)
-    fun isValidAgainst(inputStream: InputStream) = compareActualAndExcepted(JsonConverter.loadJson(inputStream))
+    fun isValidAgainst(inputStream: InputStream) = isValidAgainst(JsonConverter.loadFileAsString(inputStream))
 
     private fun compareActualAndExcepted(expected: JSONArray) {
         val actualJson = mongoConverter.convertContentToTableModel(collection).getTableModelAsJson(mapper)
