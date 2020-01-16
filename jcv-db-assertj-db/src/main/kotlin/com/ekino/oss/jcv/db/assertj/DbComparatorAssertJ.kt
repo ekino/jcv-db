@@ -4,22 +4,31 @@ import com.ekino.oss.jcv.core.JsonComparator
 import com.ekino.oss.jcv.core.JsonValidator
 import com.ekino.oss.jcv.db.assertj.exception.JsonParseException
 import com.ekino.oss.jcv.db.assertj.mapper.AssertJBaseMapper
-import com.ekino.oss.jcv.db.assertj.util.ComparatorUtil.Companion.convertTableToTableModel
-import com.ekino.oss.jcv.db.assertj.util.ComparatorUtil.Companion.getMapperByDbType
+import com.ekino.oss.jcv.db.assertj.mapper.MSSQLMapper
+import com.ekino.oss.jcv.db.assertj.mapper.MySQLMapper
+import com.ekino.oss.jcv.db.assertj.mapper.PostgresMapper
 import com.ekino.oss.jcv.db.assertj.util.DbComparatorBuilder
+import com.ekino.oss.jcv.db.config.DatabaseType
 import com.ekino.oss.jcv.db.exception.DbAssertException
+import com.ekino.oss.jcv.db.mapper.TypeMapper
+import com.ekino.oss.jcv.db.model.RowModel
+import com.ekino.oss.jcv.db.model.TableModel
+import com.ekino.oss.jcv.db.util.ConverterUtil
 import com.ekino.oss.jcv.db.util.JsonConverter
 import com.ekino.oss.jcv.db.util.JsonConverter.compareJsonAndLogResult
-import com.ekino.oss.jcv.db.util.JsonConverter.getTableModelAsJson
 import com.ekino.oss.jcv.db.util.takeIfIsJson
 import org.assertj.core.api.AbstractAssert
+import org.assertj.db.type.Source
 import org.assertj.db.type.Table
 import org.json.JSONArray
 import org.json.JSONException
 import org.skyscreamer.jsonassert.JSONCompareMode
 import java.io.IOException
 import java.io.InputStream
+import java.sql.DriverManager
+import java.util.HashMap
 import java.util.Objects
+import javax.sql.DataSource
 
 class DbComparatorAssertJ(
     actualTable: Table,
@@ -68,12 +77,41 @@ class DbComparatorAssertJ(
 
         Objects.requireNonNull<Any>(jsonComparator, "Json comparator definition is missing")
 
-        val actualJson = getTableModelAsJson(convertTableToTableModel(actual), mapper ?: getMapperByDbType(actual.source, actual.dataSource))
+        val actualJson = actual.convertTableToTableModel().getTableModelAsJson(mapper ?: getMapperByDbType(actual.source, actual.dataSource))
 
         try {
             compareJsonAndLogResult(actualJson, expected, jsonComparator)
         } catch (e: JSONException) {
             throw JsonParseException("Error with provided JSON Strings", e)
         }
+    }
+
+    private fun Table.convertTableToTableModel(): TableModel {
+        val tableModel = TableModel()
+        this.rowsList.forEach {
+            val rowModel = RowModel()
+            val cells = HashMap<String, Any?>()
+
+            it.columnsNameList.forEach { columnName -> cells[columnName] = it.getColumnValue(columnName) }
+            rowModel.cells = cells
+            tableModel.addRow(rowModel)
+        }
+        return tableModel
+    }
+
+    private fun getMapperByDbType(source: Source?, dataSource: DataSource?): TypeMapper {
+        val defaultMappers: Map<DatabaseType, AssertJBaseMapper> = mapOf(
+            DatabaseType.POSTGRESQL to PostgresMapper(),
+            DatabaseType.MYSQL to MySQLMapper(),
+            DatabaseType.MSSQL to MSSQLMapper()
+        )
+
+        val connection = when {
+            dataSource != null -> dataSource.connection
+            source != null -> DriverManager.getConnection(source.url, source.user, source.password)
+            else -> throw NullPointerException("Database connection must be not null")
+        }
+
+        return ConverterUtil.getMapperFromMapByKey(connection.metaData.databaseProductName, defaultMappers)
     }
 }

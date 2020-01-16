@@ -39,7 +39,7 @@ class DbComparatorCassandra(
     fun isValidAgainst(inputStream: InputStream) = compareActualAndExcepted(JsonConverter.loadJson(inputStream))
 
     private fun compareActualAndExcepted(expected: JSONArray) {
-        val actualJson = JsonConverter.getTableModelAsJson(queryConverter.fromQueryToTableModel(query), mapper)
+        val actualJson = queryConverter.fromQueryToTableModel(query).getTableModelAsJson(mapper)
         compareJsonAndLogResult(actualJson, expected, jsonComparator)
     }
 

@@ -6,7 +6,6 @@ import com.ekino.oss.jcv.db.exception.DbAssertException
 import com.ekino.oss.jcv.db.model.RowModel
 import com.ekino.oss.jcv.db.model.TableModel
 import com.ekino.oss.jcv.db.util.JsonConverter
-import com.ekino.oss.jcv.db.util.JsonConverter.getTableModelAsJson
 import com.ekino.oss.jcv.db.util.takeIfIsJson
 import org.json.JSONArray
 import org.skyscreamer.jsonassert.JSONCompareMode
@@ -18,7 +17,7 @@ class DbComparatorAssert(private val actualJson: JSONArray, private val jsonComp
     companion object {
         @JvmStatic
         fun assertThatTableModel(tableModel: TableModel): DbComparatorAssert {
-            val actualJson = getTableModelAsJson(tableModel)
+            val actualJson = tableModel.getTableModelAsJson()
             return DbComparatorAssert(
                 actualJson,
                 JsonComparator(JSONCompareMode.NON_EXTENSIBLE, Validators.defaultValidators())
@@ -27,7 +26,7 @@ class DbComparatorAssert(private val actualJson: JSONArray, private val jsonComp
 
         @JvmStatic
         fun assertThatRowModel(rowModel: RowModel): DbComparatorAssert {
-            val actualJson = getTableModelAsJson(TableModel(mutableSetOf(rowModel)))
+            val actualJson = TableModel(mutableSetOf(rowModel)).getTableModelAsJson()
             return DbComparatorAssert(
                 actualJson,
                 JsonComparator(JSONCompareMode.NON_EXTENSIBLE, Validators.defaultValidators())
