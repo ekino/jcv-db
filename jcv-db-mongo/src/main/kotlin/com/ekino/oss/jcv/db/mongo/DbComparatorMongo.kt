@@ -38,7 +38,7 @@ class DbComparatorMongo(
     fun isValidAgainst(inputStream: InputStream) = compareActualAndExcepted(JsonConverter.loadJson(inputStream))
 
     private fun compareActualAndExcepted(expected: JSONArray) {
-        val actualJson = JsonConverter.getTableModelAsJson(mongoConverter.convertContentToTableModel(collection), mapper)
+        val actualJson = mongoConverter.convertContentToTableModel(collection).getTableModelAsJson(mapper)
         compareJsonAndLogResult(actualJson, expected, jsonComparator)
     }
 

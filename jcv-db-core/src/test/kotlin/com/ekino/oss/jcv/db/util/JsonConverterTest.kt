@@ -7,7 +7,6 @@ import assertk.assertions.isNull
 import com.ekino.oss.jcv.db.mapper.TypeMapper
 import com.ekino.oss.jcv.db.model.RowModel
 import com.ekino.oss.jcv.db.model.TableModel
-import com.ekino.oss.jcv.db.util.JsonConverter.getTableModelAsJson
 import com.ekino.oss.jcv.db.util.JsonConverter.loadJson
 import org.json.JSONArray
 import org.json.JSONObject
@@ -57,7 +56,7 @@ class JsonConverterTest {
                 )
             )
         )
-        assertThat(getTableModelAsJson(table).toString()).isEqualTo(JSONArray("""[{ "id" : 1 }]""").toString())
+        assertThat(table.getTableModelAsJson().toString()).isEqualTo(JSONArray("""[{ "id" : 1 }]""").toString())
     }
 
     @Test
@@ -76,6 +75,6 @@ class JsonConverterTest {
             override fun getValueFromColumn(value: Any) = "$value CUSTOM"
         }
 
-        assertThat(getTableModelAsJson(table, CustomMapper()).toString()).isEqualTo(JSONArray("""[{ "id" : "1 CUSTOM" }]""").toString())
+        assertThat(table.getTableModelAsJson(CustomMapper()).toString()).isEqualTo(JSONArray("""[{ "id" : "1 CUSTOM" }]""").toString())
     }
 }

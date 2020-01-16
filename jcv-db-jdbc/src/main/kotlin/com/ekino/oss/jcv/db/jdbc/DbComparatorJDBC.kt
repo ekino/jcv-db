@@ -8,7 +8,6 @@ import com.ekino.oss.jcv.db.jdbc.util.DBComparatorBuilder
 import com.ekino.oss.jcv.db.jdbc.util.QueryConverter
 import com.ekino.oss.jcv.db.util.JsonConverter
 import com.ekino.oss.jcv.db.util.JsonConverter.compareJsonAndLogResult
-import com.ekino.oss.jcv.db.util.JsonConverter.getTableModelAsJson
 import com.ekino.oss.jcv.db.util.takeIfIsJson
 import org.json.JSONArray
 import org.skyscreamer.jsonassert.JSONCompareMode
@@ -66,7 +65,7 @@ class DbComparatorJDBC constructor(
         )
 
     private fun compareActualAndExcepted(expected: JSONArray) {
-        val actualJson = getTableModelAsJson(queryConverter.fromQueryToTableModel(query), customMapper ?: queryConverter.getMapperByType())
+        val actualJson = queryConverter.fromQueryToTableModel(query).getTableModelAsJson(customMapper ?: queryConverter.getMapperByType())
         compareJsonAndLogResult(actualJson, expected, jsonComparator)
     }
 }
