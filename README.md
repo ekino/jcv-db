@@ -74,7 +74,7 @@ Maven
   <dependency>
     <groupId>com.ekino.oss.jcv-db</groupId>
     <artifactId>jcv-db-assertj-db</artifactId>
-    <version>0.0.3</version>
+    <version>0.0.4</version>
     <scope>test</scope>
   </dependency>
   ...
@@ -144,7 +144,7 @@ Maven
   <dependency>
     <groupId>com.ekino.oss.jcv-db</groupId>
     <artifactId>jcv-db-jdbc</artifactId>
-    <version>0.0.3</version>
+    <version>0.0.4</version>
     <scope>test</scope>
   </dependency>
   ...
@@ -215,7 +215,7 @@ Maven
   <dependency>
     <groupId>com.ekino.oss.jcv-db</groupId>
     <artifactId>jcv-db-cassandra</artifactId>
-    <version>0.0.3</version>
+    <version>0.0.4</version>
     <scope>test</scope>
   </dependency>
   ...
@@ -286,7 +286,7 @@ Maven
   <dependency>
     <groupId>com.ekino.oss.jcv-db</groupId>
     <artifactId>jcv-db-mongo</artifactId>
-    <version>0.0.3</version>
+    <version>0.0.4</version>
     <scope>test</scope>
   </dependency>
   ...
