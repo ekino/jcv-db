@@ -8,10 +8,8 @@ import com.ekino.oss.jcv.db.jdbc.util.DBComparatorBuilder
 import com.ekino.oss.jcv.db.jdbc.util.QueryConverter
 import com.ekino.oss.jcv.db.util.JsonConverter
 import com.ekino.oss.jcv.db.util.JsonConverter.compareJsonAndLogResult
-import com.ekino.oss.jcv.db.util.takeIfIsJson
 import org.json.JSONArray
 import org.skyscreamer.jsonassert.JSONCompareMode
-import java.io.IOException
 import java.io.InputStream
 import java.sql.Connection
 
@@ -27,12 +25,11 @@ class DbComparatorJDBC constructor(
         fun assertThatQuery(query: String): DbComparatorJDBC = DBComparatorBuilder.create().build(query)
     }
 
-    fun isValidAgainst(input: String) = input.takeIfIsJson()?.let { compareActualAndExcepted(it as JSONArray) } ?: throw DbAssertException(
-        "Unable to parse string to json array"
+    fun isValidAgainst(input: String) = JsonConverter.formatInput(input)?.let { compareActualAndExcepted(it) } ?: throw DbAssertException(
+        "Unable to parse expected result from string to json"
     )
 
-    @Throws(IOException::class)
-    fun isValidAgainst(inputStream: InputStream) = compareActualAndExcepted(JsonConverter.loadJson(inputStream))
+    fun isValidAgainst(inputStream: InputStream) = isValidAgainst(JsonConverter.loadFileAsString(inputStream))
 
     fun using(comparator: JsonComparator) =
         DbComparatorJDBC(query, queryConverter, comparator, customMapper)

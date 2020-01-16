@@ -95,12 +95,10 @@ class MongoAssertDB {
 
         val expected = // language=json
             """
-                [
-                  {
-                    "name": "test-mongo-db",
-                    "_id": "{#mongo_id#}"
-                  }
-                ]
+              {
+                "name": "test-mongo-db",
+                "_id": "{#mongo_id#}"
+              }
             """.trimIndent()
 
         DbComparatorMongo.assertThatCollection(database.getCollection("testCollection").find(eq("name", "test-mongo-db")).first()).isValidAgainst(expected)

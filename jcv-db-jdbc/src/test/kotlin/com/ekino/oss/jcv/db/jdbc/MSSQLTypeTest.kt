@@ -317,6 +317,21 @@ class MSSQLTypeTest {
             .isValidAgainst(expected)
     }
 
+    @Test
+    fun `Should valid single row against json object`() {
+        val expected = // language=json
+            """
+              {
+                "id": "642A00A5-18F2-47CF-9E5C-0161156FF0A0",
+                "criteria_number": 3,
+                "content": "content 4"
+              }
+        """.trimIndent()
+
+        assertThatQuery("SELECT * FROM table_test WHERE id='642A00A5-18F2-47CF-9E5C-0161156FF0A0'")
+            .isValidAgainst(expected)
+    }
+
     private fun customValidator(): JsonValidator<String> {
         return validator {
             templatedValidator<String>("custom_notempty", comparator { actual, expected ->

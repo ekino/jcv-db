@@ -9,10 +9,8 @@ import com.ekino.oss.jcv.db.cassandra.util.QueryConverter
 import com.ekino.oss.jcv.db.exception.DbAssertException
 import com.ekino.oss.jcv.db.util.JsonConverter
 import com.ekino.oss.jcv.db.util.JsonConverter.compareJsonAndLogResult
-import com.ekino.oss.jcv.db.util.takeIfIsJson
 import org.json.JSONArray
 import org.skyscreamer.jsonassert.JSONCompareMode
-import java.io.IOException
 import java.io.InputStream
 
 class DbComparatorCassandra(
@@ -31,12 +29,11 @@ class DbComparatorCassandra(
         fun assertThatQuery(select: Select) = DBComparatorBuilder.create().build(select.asCql())
     }
 
-    fun isValidAgainst(input: String) = input.takeIfIsJson()?.let { compareActualAndExcepted(it as JSONArray) } ?: throw DbAssertException(
-        "Unable to parse expected result from string to json array"
+    fun isValidAgainst(input: String) = JsonConverter.formatInput(input)?.let { compareActualAndExcepted(it) } ?: throw DbAssertException(
+        "Unable to parse expected result from string to json"
     )
 
-    @Throws(IOException::class)
-    fun isValidAgainst(inputStream: InputStream) = compareActualAndExcepted(JsonConverter.loadJson(inputStream))
+    fun isValidAgainst(inputStream: InputStream) = isValidAgainst(JsonConverter.loadFileAsString(inputStream))
 
     private fun compareActualAndExcepted(expected: JSONArray) {
         val actualJson = queryConverter.fromQueryToTableModel(query).getTableModelAsJson(mapper)
