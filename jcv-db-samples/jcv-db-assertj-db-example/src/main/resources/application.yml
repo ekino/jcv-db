@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/jcv-db-test
+    username: jcv-db-test
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop

@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:11.1
+    environment:
+      POSTGRES_DB: 'jcv-db-test'
+      POSTGRES_USER: 'jcv-db-test'
+    ports:
+      - '5432:5432'
