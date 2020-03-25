@@ -17,7 +17,7 @@ object JsonConverter {
     fun compareJsonAndLogResult(actual: JSONArray, expected: JSONArray, jsonComparator: JsonComparator) {
         JSONCompare.compareJSON(expected, actual, jsonComparator)
             .takeUnless { it.passed() }
-            ?.also { fail(it.fail("", expected, actual).message) }
+            ?.also { fail("${it.message}\nActual: $actual") }
     }
 
     fun formatInput(input: String) = when (val json = input.takeIfIsJson()) {
