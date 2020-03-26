@@ -1,0 +1,10 @@
+version: '3.7'
+
+services:
+  mongodb:
+    image: mongo:4.2-bionic
+    container_name: "mongodb"
+    environment:
+      - MONGO_LOG_DIR=/dev/null
+    ports:
+      - 27017:27017

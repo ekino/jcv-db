@@ -1,0 +1,12 @@
+[
+  {
+    "code": "USD",
+    "label": "USD-label",
+    "id": "{#uuid#}",
+    "lastmodifiedby": "system",
+    "createdby": "system",
+    "version": 0,
+    "createddate": "{#date_time_format:iso_instant#}",
+    "lastmodifieddate": "{#date_time_format:iso_instant#}"
+  }
+]
