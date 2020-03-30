@@ -2,10 +2,12 @@ package com.ekino.oss.jcv.db.mongo.util
 
 import com.ekino.oss.jcv.core.JsonComparator
 import com.ekino.oss.jcv.core.JsonValidator
+import com.ekino.oss.jcv.db.exception.DbAssertException
 import com.ekino.oss.jcv.db.mongo.DbComparatorMongo
 import com.ekino.oss.jcv.db.mongo.MongoMapper
 import com.ekino.oss.jcv.db.mongo.config.DBMongoValidators
 import com.mongodb.client.FindIterable
+import com.mongodb.client.MongoDatabase
 import org.bson.Document
 import org.skyscreamer.jsonassert.JSONCompareMode
 
@@ -24,6 +26,7 @@ class DBComparatorBuilder {
     private lateinit var mode: JSONCompareMode
     private lateinit var validators: List<JsonValidator<*>>
     private var customMapper: MongoMapper? = null
+    private var database: MongoDatabase? = null
 
     companion object {
         @JvmStatic
@@ -52,17 +55,22 @@ class DBComparatorBuilder {
         return this
     }
 
-    fun build(collection: FindIterable<Document>) = DbComparatorMongo(
-        MongoConverter(),
-        JsonComparator(mode, validators),
-        customMapper ?: MongoMapper(),
-        collection.toList()
-    )
+    fun database(database: MongoDatabase): DBComparatorBuilder {
+        this.database = database
+        return this
+    }
 
-    fun build(document: Document) = DbComparatorMongo(
+    fun buildWithCollection(query: (MongoDatabase) -> FindIterable<Document>) = DbComparatorMongo(
         MongoConverter(),
         JsonComparator(mode, validators),
         customMapper ?: MongoMapper(),
-        listOf(document)
-    )
+        database ?: throw DbAssertException("Mongo databse cannot be null")
+    ) { database: MongoDatabase -> query.invoke(database).toList() }
+
+    fun buildWithDocument(query: (MongoDatabase) -> Document?) = DbComparatorMongo(
+        MongoConverter(),
+        JsonComparator(mode, validators),
+        customMapper ?: MongoMapper(),
+        database ?: throw DbAssertException("Mongo database cannot be null")
+    ) { database: MongoDatabase -> query.invoke(database)?.let { listOf(it) } ?: emptyList() }
 }
