@@ -5,12 +5,14 @@ import com.ekino.oss.jcv.db.util.takeIfIsJson
 import com.microsoft.sqlserver.jdbc.Geometry
 import microsoft.sql.DateTimeOffset
 import org.assertj.db.type.Value
+import java.math.BigDecimal
 
 open class MSSQLMapper : AssertJBaseMapper() {
 
     override fun mapNumberType(value: Value): Any {
-        return when (value.value) {
-            is Float -> java.lang.Double.valueOf(value.value.toString())
+        return when (val valueOfValue = value.value) {
+            is Float -> java.lang.Double.valueOf(valueOfValue.toString())
+            is BigDecimal -> valueOfValue.toDouble()
             else -> value.value
         }
     }

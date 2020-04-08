@@ -18,6 +18,7 @@ import org.postgresql.geometric.PGpoint
 import org.postgresql.geometric.PGpolygon
 import org.postgresql.util.PGInterval
 import org.postgresql.util.PGobject
+import java.math.BigDecimal
 import java.sql.Timestamp
 import java.util.UUID
 
@@ -28,8 +29,9 @@ open class PostgresMapper : AssertJBaseMapper() {
     override fun mapBooleanType(value: Value): Any = value.value
 
     override fun mapNumberType(value: Value): Any {
-        return when (value.value) {
-            is Float -> java.lang.Double.valueOf(value.value.toString())
+        return when (val valueOfValue = value.value) {
+            is Float -> java.lang.Double.valueOf(valueOfValue.toString())
+            is BigDecimal -> valueOfValue.toDouble()
             else -> value.value
         }
     }

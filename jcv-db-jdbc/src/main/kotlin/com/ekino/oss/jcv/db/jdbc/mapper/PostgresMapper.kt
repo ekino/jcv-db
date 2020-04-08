@@ -18,6 +18,7 @@ import org.postgresql.geometric.PGpoint
 import org.postgresql.geometric.PGpolygon
 import org.postgresql.util.PGInterval
 import org.postgresql.util.PGobject
+import java.math.BigDecimal
 import java.sql.Timestamp
 import java.util.UUID
 
@@ -39,6 +40,7 @@ open class PostgresMapper : JDBCMapper() {
 
     override fun mapNumberType(value: Number): Number = when (value) {
         is Float -> java.lang.Double.valueOf(value.toString())
+        is BigDecimal -> value.toDouble()
         else -> value
     }
 

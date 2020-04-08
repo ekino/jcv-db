@@ -6,6 +6,8 @@ import com.datastax.oss.driver.internal.core.data.DefaultUdtValue
 import com.ekino.oss.jcv.db.mapper.TypeMapper
 import org.json.JSONArray
 import org.json.JSONObject
+import java.math.BigDecimal
+import java.math.BigInteger
 import java.net.Inet4Address
 import java.time.Instant
 import java.time.LocalDate
@@ -20,6 +22,8 @@ open class CassandraMapper : TypeMapper {
     override fun getValueFromColumn(value: Any): Any? {
         return when (value) {
             is Float -> java.lang.Double.valueOf(value.toString())
+            is BigInteger -> value.toInt()
+            is BigDecimal -> value.toDouble()
             is UUID -> value.toString()
 
             is LocalDate -> value.toString()
