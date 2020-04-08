@@ -1,18 +1,19 @@
 package com.ekino.oss.jcv.db
 
+import assertk.assertThat
+import assertk.assertions.hasMessage
+import assertk.assertions.isFailure
 import com.ekino.oss.jcv.db.model.RowModel
 import com.ekino.oss.jcv.db.model.TableModel
 import org.json.JSONArray
 import org.json.JSONObject
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import java.io.IOException
 
 class DbComparatorAssertTest {
 
     @Test
     @DisplayName("Should test types for postgresql database")
-    @Throws(IOException::class)
     fun shouldTestNumericTypesPostGreSQL() {
         val expected = // language=json
         """
@@ -78,5 +79,37 @@ class DbComparatorAssertTest {
             )
         )
         DbComparatorAssert.assertThatTableModel(tableModel).isValidAgainst(expected)
+    }
+
+    @Test
+    @DisplayName("Should test error format")
+    fun shouldTestErrorFormat() {
+        val expected = // language=json
+            """
+            [  
+                {    
+                    "content_test": "abcd"
+                }
+            ]
+        """.trimIndent()
+
+        val tableModel = TableModel()
+            tableModel.addRow(
+                RowModel(
+                    mutableMapOf(
+                        "content_test" to "abcde"
+                )
+            )
+        )
+
+        assertThat {
+            DbComparatorAssert.assertThatTableModel(tableModel).isValidAgainst(expected)
+        }.isFailure().hasMessage("""[content_test=abcd]
+Expected: a JSON object
+     but none found
+ ; [content_test=abcde]
+Unexpected: a JSON object
+
+Actual: [{"content_test":"abcde"}]""")
     }
 }
