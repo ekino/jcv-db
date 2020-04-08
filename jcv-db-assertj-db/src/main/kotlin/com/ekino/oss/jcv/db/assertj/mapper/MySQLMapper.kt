@@ -3,14 +3,16 @@ package com.ekino.oss.jcv.db.assertj.mapper
 import com.ekino.oss.jcv.db.mapper.geometry.GeometryMapper.fromByteArrayToGeometryType
 import com.ekino.oss.jcv.db.util.takeIfIsJson
 import org.assertj.db.type.Value
+import java.math.BigDecimal
 import java.sql.Time
 import java.sql.Timestamp
 
 open class MySQLMapper : AssertJBaseMapper() {
 
     override fun mapNumberType(value: Value): Any {
-        return when (value.value) {
-            is Float -> java.lang.Double.valueOf(value.value.toString())
+        return when (val valueOfValue = value.value) {
+            is Float -> java.lang.Double.valueOf(valueOfValue.toString())
+            is BigDecimal -> valueOfValue.toDouble()
             else -> value.value
         }
     }

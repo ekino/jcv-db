@@ -71,7 +71,6 @@ dependencies {
 
     implementation(group = "com.ekino.oss.jcv", name = "jcv-core", version = "${project.extra["jcv-core.version"]}")
     implementation(group = "org.skyscreamer", name = "jsonassert", version = "${project.extra["jsonassert.version"]}")
-    implementation(group = "org.json", name = "json", version = "20190722")
     implementation(group = "commons-io", name = "commons-io", version = "2.6")
     implementation(group = "com.fasterxml.jackson.core", name = "jackson-databind", version = "2.10.1")
 
