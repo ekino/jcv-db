@@ -8,6 +8,7 @@ import com.ekino.oss.jcv.db.mongo.util.MongoConverter
 import com.ekino.oss.jcv.db.util.JsonConverter
 import com.ekino.oss.jcv.db.util.JsonConverter.compareJsonAndLogResult
 import com.mongodb.client.FindIterable
+import com.mongodb.client.MongoDatabase
 import org.bson.Document
 import org.json.JSONArray
 import org.skyscreamer.jsonassert.JSONCompareMode
@@ -17,15 +18,16 @@ class DbComparatorMongo(
     private val mongoConverter: MongoConverter,
     private val jsonComparator: JsonComparator,
     private val mapper: MongoMapper,
-    private val collection: List<Document>
+    private val mongoDatabase: MongoDatabase,
+    private val query: (MongoDatabase) -> List<Document>
 ) {
 
     companion object {
         @JvmStatic
-        fun assertThatCollection(collection: FindIterable<Document>) = DBComparatorBuilder.create().build(collection)
+        fun assertThatCollection(query: (MongoDatabase) -> FindIterable<Document>) = DBComparatorBuilder.create().buildWithCollection(query)
 
         @JvmStatic
-        fun assertThatCollection(document: Document?) = document?.let { DBComparatorBuilder.create().build(it) } ?: throw DbAssertException("Mongo document is null")
+        fun assertThatDocument(query: (MongoDatabase) -> Document) = DBComparatorBuilder.create().buildWithDocument(query)
     }
 
     fun isValidAgainst(input: String) = JsonConverter.formatInput(input)?.let { compareActualAndExcepted(it) } ?: throw DbAssertException(
@@ -35,26 +37,35 @@ class DbComparatorMongo(
     fun isValidAgainst(inputStream: InputStream) = isValidAgainst(JsonConverter.loadFileAsString(inputStream))
 
     private fun compareActualAndExcepted(expected: JSONArray) {
-        val actualJson = mongoConverter.convertContentToTableModel(collection).getTableModelAsJson(mapper)
+        val actualJson = mongoConverter.convertContentToTableModel(query.invoke(mongoDatabase)).getTableModelAsJson(mapper)
         compareJsonAndLogResult(actualJson, expected, jsonComparator)
     }
 
     fun <T : JsonValidator<*>> using(vararg validators: T) = using(validators.toList())
 
+    fun using(mongoDatabase: MongoDatabase) = DbComparatorMongo(
+        mongoConverter,
+        jsonComparator,
+        mapper,
+        mongoDatabase,
+        query
+    )
+
     fun <T : JsonValidator<*>> using(validators: List<T>) = using(JSONCompareMode.STRICT, validators)
 
-    fun <T : JsonValidator<*>> using(mode: JSONCompareMode, validators: List<T>) = using(mode, validators, mapper)
+    fun <T : JsonValidator<*>> using(mode: JSONCompareMode, validators: List<T>) = using(mode, validators, mapper, mongoDatabase)
 
     fun <T : JsonValidator<*>> using(mode: JSONCompareMode, vararg validators: T) = using(mode, validators.toList())
 
     fun using(comparator: JsonComparator) =
-        DbComparatorMongo(mongoConverter, comparator, mapper, collection)
+        DbComparatorMongo(mongoConverter, comparator, mapper, mongoDatabase, query)
 
-    fun <T : JsonValidator<*>> using(mode: JSONCompareMode, validators: List<T>, mapper: MongoMapper) =
+    fun <T : JsonValidator<*>> using(mode: JSONCompareMode, validators: List<T>, mapper: MongoMapper, mongoDatabase: MongoDatabase) =
         DbComparatorMongo(
             mongoConverter,
             JsonComparator(mode, validators),
             mapper,
-            collection
+            mongoDatabase,
+            query
         )
 }

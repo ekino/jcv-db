@@ -1,7 +1,10 @@
 package com.ekino.oss.jcv.db.mongo
 
+import com.ekino.oss.jcv.db.mongo.util.DBComparatorBuilder
 import com.mongodb.BasicDBObject
-import com.mongodb.MongoClient
+import com.mongodb.client.FindIterable
+import com.mongodb.client.MongoClients
+import com.mongodb.client.MongoDatabase
 import com.mongodb.client.model.Filters.eq
 import com.mongodb.client.model.Sorts.descending
 import org.bson.Document
@@ -24,7 +27,7 @@ class MongoAssertDB {
         @BeforeAll
         @JvmStatic
         fun setUpMongoData() {
-            val mongoClient = MongoClient(mongoContainer.containerIpAddress, mongoContainer.getMappedPort(27017))
+            val mongoClient = MongoClients.create("mongodb://${mongoContainer.containerIpAddress}:${mongoContainer.getMappedPort(27017)}")
 
             val document1 = Document("name", "test-mongo-db")
             val document2 = Document("name", "test-mongo-db-2")
@@ -46,11 +49,22 @@ class MongoAssertDB {
         }
     }
 
+    private fun assertThatDocument(query: (MongoDatabase) -> Document?): DbComparatorMongo {
+        return DBComparatorBuilder
+            .create()
+            .database(MongoClients.create("mongodb://${mongoContainer.containerIpAddress}:${mongoContainer.getMappedPort(27017)}").getDatabase("test"))
+            .buildWithDocument(query)
+    }
+
+    private fun assertThatCollection(query: (MongoDatabase) -> FindIterable<Document>): DbComparatorMongo {
+        return DBComparatorBuilder
+            .create()
+            .database(MongoClients.create("mongodb://${mongoContainer.containerIpAddress}:${mongoContainer.getMappedPort(27017)}").getDatabase("test"))
+            .buildWithCollection(query)
+    }
+
     @Test
     fun `Should assert mongo collection`() {
-
-        val mongoClient = MongoClient(mongoContainer.containerIpAddress, mongoContainer.getMappedPort(27017))
-        val database = mongoClient.getDatabase("test")
 
         val expected = // language=json
             """
@@ -84,14 +98,11 @@ class MongoAssertDB {
                 ]
             """.trimIndent()
 
-        DbComparatorMongo.assertThatCollection(database.getCollection("testCollection").find()).isValidAgainst(expected)
+        assertThatCollection { database: MongoDatabase -> database.getCollection("testCollection").find() }.isValidAgainst(expected)
     }
 
     @Test
     fun `Should assert single document`() {
-
-        val mongoClient = MongoClient(mongoContainer.containerIpAddress, mongoContainer.getMappedPort(27017))
-        val database = mongoClient.getDatabase("test")
 
         val expected = // language=json
             """
@@ -101,14 +112,11 @@ class MongoAssertDB {
               }
             """.trimIndent()
 
-        DbComparatorMongo.assertThatCollection(database.getCollection("testCollection").find(eq("name", "test-mongo-db")).first()).isValidAgainst(expected)
+        assertThatDocument { database: MongoDatabase -> database.getCollection("testCollection").find(eq("name", "test-mongo-db")).first() }.isValidAgainst(expected)
     }
 
     @Test
     fun `Should validate document with json object field`() {
-
-        val mongoClient = MongoClient(mongoContainer.containerIpAddress, mongoContainer.getMappedPort(27017))
-        val database = mongoClient.getDatabase("test")
 
         val expected = // language=json
             """
@@ -126,14 +134,11 @@ class MongoAssertDB {
                 ]
             """.trimIndent()
 
-        DbComparatorMongo.assertThatCollection(database.getCollection("testCollection").find(eq("name", "test-mongo-db-3")).first()).isValidAgainst(expected)
+        assertThatDocument { database: MongoDatabase -> database.getCollection("testCollection").find(eq("name", "test-mongo-db-3")).first() }.isValidAgainst(expected)
     }
 
     @Test
     fun `Should validate document with json array field`() {
-
-        val mongoClient = MongoClient(mongoContainer.containerIpAddress, mongoContainer.getMappedPort(27017))
-        val database = mongoClient.getDatabase("test")
 
         val expected = // language=json
             """
@@ -151,14 +156,11 @@ class MongoAssertDB {
                 ]
             """.trimIndent()
 
-        DbComparatorMongo.assertThatCollection(database.getCollection("testCollection").find(eq("name", "test-mongo-db-4")).first()).isValidAgainst(expected)
+        assertThatDocument { database: MongoDatabase -> database.getCollection("testCollection").find(eq("name", "test-mongo-db-4")).first() }.isValidAgainst(expected)
     }
 
     @Test
     fun `Should validate document with json object validator`() {
-
-        val mongoClient = MongoClient(mongoContainer.containerIpAddress, mongoContainer.getMappedPort(27017))
-        val database = mongoClient.getDatabase("test")
 
         val expected = // language=json
             """
@@ -174,14 +176,11 @@ class MongoAssertDB {
                 ]
             """.trimIndent()
 
-        DbComparatorMongo.assertThatCollection(database.getCollection("testCollection").find(eq("name", "test-mongo-db-3")).first()).isValidAgainst(expected)
+        assertThatDocument { database: MongoDatabase -> database.getCollection("testCollection").find(eq("name", "test-mongo-db-3")).first() }.isValidAgainst(expected)
     }
 
     @Test
     fun `Should validate document with json array validator`() {
-
-        val mongoClient = MongoClient(mongoContainer.containerIpAddress, mongoContainer.getMappedPort(27017))
-        val database = mongoClient.getDatabase("test")
 
         val expected = // language=json
             """
@@ -194,13 +193,11 @@ class MongoAssertDB {
                 ]
             """.trimIndent()
 
-        DbComparatorMongo.assertThatCollection(database.getCollection("testCollection").find(eq("name", "test-mongo-db-4")).first()).isValidAgainst(expected)
+        assertThatDocument { database: MongoDatabase -> database.getCollection("testCollection").find(eq("name", "test-mongo-db-4")).first() }.isValidAgainst(expected)
     }
 
     @Test
     fun `Should assert request with field restriction`() {
-        val mongoClient = MongoClient(mongoContainer.containerIpAddress, mongoContainer.getMappedPort(27017))
-        val database = mongoClient.getDatabase("test")
 
         val expected = // language=json
             """
@@ -224,13 +221,11 @@ class MongoAssertDB {
                 ]
             """.trimIndent()
 
-        DbComparatorMongo.assertThatCollection(database.getCollection("testCollection").find().projection(BasicDBObject("name", true))).isValidAgainst(expected)
+        assertThatCollection { database: MongoDatabase -> database.getCollection("testCollection").find().projection(BasicDBObject("name", true)) }.isValidAgainst(expected)
     }
 
     @Test
     fun `Should assert request with ordering`() {
-        val mongoClient = MongoClient(mongoContainer.containerIpAddress, mongoContainer.getMappedPort(27017))
-        val database = mongoClient.getDatabase("test")
 
         val expected = // language=json
             """
@@ -264,6 +259,6 @@ class MongoAssertDB {
                 ]
             """.trimIndent()
 
-        DbComparatorMongo.assertThatCollection(database.getCollection("testCollection").find().sort(descending("name"))).isValidAgainst(expected)
+        assertThatCollection { database: MongoDatabase -> database.getCollection("testCollection").find().sort(descending("name")) }.isValidAgainst(expected)
     }
 }
