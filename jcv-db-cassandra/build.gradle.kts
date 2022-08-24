@@ -6,8 +6,7 @@ plugins {
     `java-library`
     signing
     jacoco
-    id("org.jmailen.kotlinter") version "2.1.1"
-    id("org.jetbrains.dokka") version "0.9.18"
+    id("org.jetbrains.dokka")
 }
 
 configurations {
@@ -17,7 +16,7 @@ configurations {
 }
 
 val javadocJar by tasks.registering(Jar::class) {
-    dependsOn("dokka")
+    dependsOn("dokkaHtml")
     archiveClassifier.set("javadoc")
     from(buildDir.resolve("dokka"))
 }
@@ -39,7 +38,11 @@ tasks {
     }
 
     withType<DokkaTask> {
-        reportUndocumented = false
+        dokkaSourceSets {
+            configureEach {
+                reportUndocumented.set(false)
+            }
+        }
     }
 
     artifacts {
