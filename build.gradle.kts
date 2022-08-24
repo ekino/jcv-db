@@ -4,6 +4,7 @@ plugins {
     base
     kotlin("jvm") version "1.7.10"
     id("org.jetbrains.dokka") version "1.7.10" apply false
+    id("com.ekino.oss.plugin.kotlin-quality") version "3.3.0" apply false
     id("net.researchgate.release") version "2.8.1"
 }
 

@@ -10,12 +10,14 @@ data class TableModel(val rows: MutableSet<RowModel> = mutableSetOf()) {
 
     fun getTableModelAsJson(typeMapper: TypeMapper? = null): JSONArray {
         val mapper = typeMapper ?: DefaultMapper()
-        return JSONArray(this.rows.map {
-            convertRowModelToJSONObject(
-                it,
-                mapper
-            )
-        })
+        return JSONArray(
+            this.rows.map {
+                convertRowModelToJSONObject(
+                    it,
+                    mapper
+                )
+            }
+        )
     }
 
     private fun convertRowModelToJSONObject(row: RowModel, mapper: TypeMapper) = row.cells

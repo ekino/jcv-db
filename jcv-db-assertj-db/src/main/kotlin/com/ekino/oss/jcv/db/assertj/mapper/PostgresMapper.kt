@@ -46,31 +46,39 @@ open class PostgresMapper : AssertJBaseMapper() {
                 convertPGPointToPointModel(valueOfValue.center)
             ).toJsonObject()
             is PGpoint -> convertPGPointToPointModel(valueOfValue).toJsonObject()
-            is PGlseg -> DefaultGeometricModel(valueOfValue.point.map {
-                convertPGPointToPointModel(
-                    it
-                )
-            }.toList()).toJsonArray()
+            is PGlseg -> DefaultGeometricModel(
+                valueOfValue.point.map {
+                    convertPGPointToPointModel(
+                        it
+                    )
+                }.toList()
+            ).toJsonArray()
             is PGline -> EuclideanLine(
                 valueOfValue.a,
                 valueOfValue.b,
                 valueOfValue.c
             ).toJsonObject()
-            is PGpolygon -> DefaultGeometricModel(valueOfValue.points.map {
-                convertPGPointToPointModel(
-                    it
-                )
-            }.toList()).toJsonArray()
-            is PGpath -> DefaultGeometricModel(valueOfValue.points.map {
-                convertPGPointToPointModel(
-                    it
-                )
-            }.toList()).toJsonArray()
-            is PGbox -> DefaultGeometricModel(valueOfValue.point.map {
-                convertPGPointToPointModel(
-                    it
-                )
-            }.toList()).toJsonArray()
+            is PGpolygon -> DefaultGeometricModel(
+                valueOfValue.points.map {
+                    convertPGPointToPointModel(
+                        it
+                    )
+                }.toList()
+            ).toJsonArray()
+            is PGpath -> DefaultGeometricModel(
+                valueOfValue.points.map {
+                    convertPGPointToPointModel(
+                        it
+                    )
+                }.toList()
+            ).toJsonArray()
+            is PGbox -> DefaultGeometricModel(
+                valueOfValue.point.map {
+                    convertPGPointToPointModel(
+                        it
+                    )
+                }.toList()
+            ).toJsonArray()
             is PGobject -> valueOfValue.value.takeIfIsJson() ?: throw DbAssertException(
                 "Unable to parse pg object to json"
             )

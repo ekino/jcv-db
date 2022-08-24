@@ -129,7 +129,7 @@ class MSSQLTypeTest {
                 "content": "content 3"
               }
             ]
-        """.trimIndent()
+            """.trimIndent()
         assertThatQuery("SELECT * FROM table_test WHERE criteria_number > 1")
             .isValidAgainst(expected)
     }
@@ -187,7 +187,7 @@ class MSSQLTypeTest {
                   "content": "content 1"
                 }
               ]
-        """.trimIndent()
+            """.trimIndent()
         assertThatQuery("SELECT * FROM table_test ORDER BY criteria_number DESC")
             .isValidAgainst(expected)
     }
@@ -218,7 +218,7 @@ class MSSQLTypeTest {
                   "content": "content 1"
                 }
               ]
-        """.trimIndent()
+            """.trimIndent()
         assertThatThrownBy {
             assertThatQuery("SELECT * FROM table_test ORDER BY criteria_number DESC")
                 .isValidAgainst(expected)
@@ -236,7 +236,7 @@ class MSSQLTypeTest {
                   "content": "content 1"
                 }
               ]
-        """.trimIndent()
+            """.trimIndent()
 
         DBComparatorBuilder
             .create()
@@ -271,7 +271,7 @@ class MSSQLTypeTest {
                   "content": "content 1 CUSTOM"
                 }
               ]
-        """.trimIndent()
+            """.trimIndent()
         assertThatQuery("SELECT * FROM table_test")
             .using(CustomMSSQLMapper())
             .isValidAgainst(expected)
@@ -303,7 +303,7 @@ class MSSQLTypeTest {
                   "content": "{#custom_notempty#}"
                 }
               ]
-        """.trimIndent()
+            """.trimIndent()
         assertThatQuery("SELECT * FROM table_test")
             .using(customValidator())
             .isValidAgainst(expected)
@@ -318,7 +318,7 @@ class MSSQLTypeTest {
                 "criteria_number": 3,
                 "content": "content 4"
               }
-        """.trimIndent()
+            """.trimIndent()
 
         assertThatQuery("SELECT * FROM table_test WHERE id='642A00A5-18F2-47CF-9E5C-0161156FF0A0'")
             .isValidAgainst(expected)
@@ -326,12 +326,15 @@ class MSSQLTypeTest {
 
     private fun customValidator(): JsonValidator<String> {
         return validator {
-            templatedValidator<String>("custom_notempty", comparator { actual, expected ->
-                if (actual == null || actual.isEmpty()) {
-                    throw ValueMatcherException("Value is null or empty", expected, actual)
+            templatedValidator<String>(
+                "custom_notempty",
+                comparator { actual, expected ->
+                    if (actual == null || actual.isEmpty()) {
+                        throw ValueMatcherException("Value is null or empty", expected, actual)
+                    }
+                    true
                 }
-                true
-            })
+            )
         }
     }
 

@@ -19,9 +19,9 @@ class DbComparatorCassandraTest {
             CassandraDataSource(
                 CASSANDRA_DC,
                 CASSANDRA_IP_ADDRESS,
-                CASSANDRA_PORT
+                CASSANDRA_PORT)
             )
-        )
+
         .build(query)
 
     @Test
@@ -85,7 +85,8 @@ class DbComparatorCassandraTest {
               }
             ]  ,
             "column_null": null
-        }]""".trimIndent()
+        }]
+            """.trimIndent()
 
         assertThatQuery("select * from cassandratest.cassandra_table_type")
             .isValidAgainst(expected)
@@ -151,16 +152,17 @@ class DbComparatorCassandraTest {
               }
             ]  ,
             "column_null": null
-        }]""".trimIndent()
+        }]
+            """.trimIndent()
 
         DbComparatorCassandra.assertThatQuery(QueryBuilder.selectFrom("cassandratest", "cassandra_table_type").all())
             .using(
                 CassandraDataSource(
                     CASSANDRA_DC,
                     CASSANDRA_IP_ADDRESS,
-                    CASSANDRA_PORT
+                    CASSANDRA_PORT)
                 )
-            )
+
             .isValidAgainst(expected)
     }
 
@@ -183,16 +185,17 @@ class DbComparatorCassandraTest {
                       "content": "content 1",
                       "id": "dbeb9161-cf55-4008-a233-9df257a418c3"
                   }
-            ]""".trimIndent()
+            ]
+            """.trimIndent()
 
         DbComparatorCassandra.assertThatQuery("SELECT * FROM cassandratest.table_test WHERE content = 'content 1';")
             .using(
                 CassandraDataSource(
                     CASSANDRA_DC,
                     CASSANDRA_IP_ADDRESS,
-                    CASSANDRA_PORT
+                    CASSANDRA_PORT)
                 )
-            )
+
             .isValidAgainst(expected)
     }
 
@@ -215,16 +218,17 @@ class DbComparatorCassandraTest {
                       "content": "content 1",
                       "id": "d8a32fff-13a5-4db6-9c2c-111bee329575"
                   }
-            ]""".trimIndent()
+            ]
+            """.trimIndent()
 
         DbComparatorCassandra.assertThatQuery("SELECT * FROM cassandratest.table_test WHERE content = 'content 1' ORDER BY criteria_number DESC;")
             .using(
                 CassandraDataSource(
                     CASSANDRA_DC,
                     CASSANDRA_IP_ADDRESS,
-                    CASSANDRA_PORT
+                    CASSANDRA_PORT)
                 )
-            )
+
             .isValidAgainst(expected)
     }
 }

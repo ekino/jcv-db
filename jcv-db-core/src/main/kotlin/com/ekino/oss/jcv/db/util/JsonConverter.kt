@@ -32,6 +32,7 @@ object JsonConverter {
 fun Any.toJsonObject() = JSONObject(ObjectMapper().writeValueAsString(this))
 fun Any.toJsonArray() = JSONArray(ObjectMapper().writeValueAsString(this))
 
+@Suppress("SwallowedException")
 fun String.takeIfIsJson() = try {
     when (val json = JSONTokener(this).nextValue()) {
         is String -> null

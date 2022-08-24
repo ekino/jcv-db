@@ -24,6 +24,8 @@ import com.ekino.oss.jcv.db.model.Point as ModelPoint
 
 object GeometryMapper {
 
+    const val SRID_SIZE = 4
+
     @JvmStatic
     fun fromByteArrayToGeometryType(bytes: ByteArray) = readByteArray(bytes)?.let { handleGeometryType(it) }
 
@@ -64,7 +66,7 @@ object GeometryMapper {
         val inputStream = ByteArrayInputStream(bytes)
 
         // SRID
-        val sridBytes = ByteArray(4)
+        val sridBytes = ByteArray(SRID_SIZE)
         inputStream.read(sridBytes)
         val srid = ByteOrderValues.getInt(sridBytes, byteOrder)
 

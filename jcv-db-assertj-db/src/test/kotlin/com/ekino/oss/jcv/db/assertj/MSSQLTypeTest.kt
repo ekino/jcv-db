@@ -246,12 +246,15 @@ class MSSQLTypeTest {
 
     private fun customValidator(): JsonValidator<String> {
         return validator {
-            templatedValidator<String>("custom_notempty", comparator { actual, expected ->
-                if (actual == null || actual.isEmpty()) {
-                    throw ValueMatcherException("Value is null or empty", expected, actual)
+            templatedValidator<String>(
+                "custom_notempty",
+                comparator { actual, expected ->
+                    if (actual == null || actual.isEmpty()) {
+                        throw ValueMatcherException("Value is null or empty", expected, actual)
+                    }
+                    true
                 }
-                true
-            })
+            )
         }
     }
 

@@ -7,12 +7,17 @@ plugins {
     signing
     jacoco
     id("org.jetbrains.dokka")
+    id("com.ekino.oss.plugin.kotlin-quality")
 }
 
 configurations {
     implementation {
         resolutionStrategy.failOnVersionConflict()
     }
+}
+
+kotlinQuality {
+    customDetektConfig = "config/detekt.yml"
 }
 
 val javadocJar by tasks.registering(Jar::class) {
@@ -57,7 +62,7 @@ publishing {
     publications {
         named<MavenPublication>(publicationName) {
             artifact(javadocJar.get())
-            
+
             from(components["java"])
         }
     }
