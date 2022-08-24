@@ -1,0 +1,132 @@
+name: Publish release
+on:
+  push:
+    tags:
+      - "[0-9]+.[0-9]+*"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:11.1
+        env:
+          POSTGRES_DB: postgres-test
+          POSTGRES_USER: postgres-user
+          POSTGRES_PASSWORD: postgres-password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+
+      mssql:
+        image: mcr.microsoft.com/mssql/server:2017-latest
+        env:
+          ACCEPT_EULA: Y
+          MSSQL_PID: Express
+          SA_PASSWORD: A_Str0ng_Required_Password
+        ports:
+          - 1433:1433
+        options: >-
+          --health-cmd "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "A_Str0ng_Required_Password" -Q 'SELECT 1' || exit 1"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+
+      mysql:
+        image: mysql:8.0.21
+        env:
+          MYSQL_ROOT_PASSWORD: mysql-password
+          MYSQL_DATABASE: mysql-text
+          MYSQL_USER: mysql-user
+          MYSQL_PASSWORD: mysql-password
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd "mysqladmin ping -h localhost -u mysql-user --password=mysql-password"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+
+      mongodb:
+        image: mongo:3.1.5
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "echo 'db.runCommand({ ping: 1 })' | mongo localhost:27017/test --quiet"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+
+      cassandra:
+        image: cassandra
+        ports:
+          - 9042:9042
+        env:
+          CASSANDRA_DC: local
+          CASSANDRA_ENDPOINT_SNITCH: GossipingPropertyFileSnitch
+        options:
+          --health-cmd "cqlsh localhost 9042 -u cassandra -p cassandra -e 'describe cluster'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+
+    steps:
+      - name: Setup java
+        uses: actions/setup-java@v3
+        with:
+          distribution: "temurin"
+          java-version: 11
+          cache: "gradle"
+      - name: Check version not snapshot
+        run: |
+          PROJECT_VERSION=$(./gradlew -q printVersion | tail -n 1)
+          echo "Project version is $PROJECT_VERSION"
+          if [[ "$PROJECT_VERSION" == *"SNAPSHOT" ]]; then exit 1; fi
+      - name: Decrypt large secret
+        run: |
+          chmod +x ./.github/workflows/decrypt_secret.sh
+          ./.github/workflows/decrypt_secret.sh
+        env:
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+      - name: Build
+        run: ./gradlew build
+      - name: Publish
+        run: ./gradlew publish -PossrhUrl="$PUBLISH_RELEASE_REPO_URL" -PossrhUsername="$PUBLISH_REPO_USERNAME" -PossrhPassword="$PUBLISH_REPO_PASSWORD" -Psigning.keyId="$GPG_KEY_ID" -Psigning.password="$GPG_PASSPHRASE" -Psigning.secretKeyRingFile="$SIGN_FILE_PATH"
+        env:
+          PUBLISH_RELEASE_REPO_URL: https://oss.sonatype.org/service/local/staging/deploy/maven2/
+          PUBLISH_REPO_USERNAME: ${{ secrets.SONATYPE_OSS_USERNAME }}
+          PUBLISH_REPO_PASSWORD: ${{ secrets.SONATYPE_OSS_PASSWORD }}
+          GPG_KEY_ID: ${{ secrets.GPG_KEY_ID }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          SIGN_FILE_PATH: "${{ github.workspace }}/.github/workflows/jcv_db_sign.gpg"
+      - name: Create Github release
+        run: |
+          set -x
+          assets=()
+          for asset in ${JCV_DB_CORE_ASSETS_FOLDER}; do
+            assets+=("-a" "$asset")
+          done
+          for asset in ${JCV_DB_ASSERTJ_DB_ASSETS_FOLDER}; do
+            assets+=("-a" "$asset")
+          done
+          for asset in ${JCV_DB_CASSANDRA_ASSETS_FOLDER}; do
+            assets+=("-a" "$asset")
+          done
+          for asset in ${JCV_DB_JDBC_ASSETS_FOLDER}; do
+            assets+=("-a" "$asset")
+          done
+          for asset in ${JCV_DB_MONGO_ASSETS_FOLDER}; do
+            assets+=("-a" "$asset")
+          done
+          hub release create --draft "${assets[@]}" -m "Release of ${{ github.ref }}" "${{ github.ref }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          JCV_DB_CORE_ASSETS_FOLDER: "${{ github.workspace }}/jcv-db-core/build/libs/*"
+          JCV_DB_ASSERTJ_DB_ASSETS_FOLDER: "${{ github.workspace }}/jcv-db-assertj-db/build/libs/*"
+          JCV_DB_CASSANDRA_ASSETS_FOLDER: "${{ github.workspace }}/jcv-db-cassandra/build/libs/*"
+          JCV_DB_JDBC_ASSETS_FOLDER: "${{ github.workspace }}/jcv-db-jdbc/build/libs/*"
+          JCV_DB_MONGO_ASSETS_FOLDER: "${{ github.workspace }}/jcv-db-mongo/build/libs/*"

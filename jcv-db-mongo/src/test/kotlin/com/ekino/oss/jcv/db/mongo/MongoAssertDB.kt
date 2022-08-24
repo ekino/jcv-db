@@ -10,24 +10,17 @@ import com.mongodb.client.model.Sorts.descending
 import org.bson.Document
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
-import org.testcontainers.junit.jupiter.Container
-import org.testcontainers.junit.jupiter.Testcontainers
 
-@Testcontainers
 class MongoAssertDB {
 
     companion object {
-        @Container
-        @JvmStatic
-        val mongoContainer: KGenericContainer = KGenericContainer(
-            "mongo:3.1.5"
-        )
-            .withExposedPorts(27017)
+        const val ADDRESS = "localhost"
+        const val PORT = 27017
 
         @BeforeAll
         @JvmStatic
         fun setUpMongoData() {
-            val mongoClient = MongoClients.create("mongodb://${mongoContainer.containerIpAddress}:${mongoContainer.getMappedPort(27017)}")
+            val mongoClient = MongoClients.create("mongodb://$ADDRESS:$PORT")
 
             val document1 = Document("name", "test-mongo-db")
             val document2 = Document("name", "test-mongo-db-2")
@@ -52,14 +45,14 @@ class MongoAssertDB {
     private fun assertThatDocument(query: (MongoDatabase) -> Document?): DbComparatorMongo {
         return DBComparatorBuilder
             .create()
-            .database(MongoClients.create("mongodb://${mongoContainer.containerIpAddress}:${mongoContainer.getMappedPort(27017)}").getDatabase("test"))
+            .database(MongoClients.create("mongodb://$ADDRESS:$PORT").getDatabase("test"))
             .buildWithDocument(query)
     }
 
     private fun assertThatCollection(query: (MongoDatabase) -> FindIterable<Document>): DbComparatorMongo {
         return DBComparatorBuilder
             .create()
-            .database(MongoClients.create("mongodb://${mongoContainer.containerIpAddress}:${mongoContainer.getMappedPort(27017)}").getDatabase("test"))
+            .database(MongoClients.create("mongodb://$ADDRESS:$PORT").getDatabase("test"))
             .buildWithCollection(query)
     }
 

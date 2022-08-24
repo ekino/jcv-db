@@ -5,7 +5,6 @@ import com.ekino.oss.jcv.core.validator.comparator
 import com.ekino.oss.jcv.core.validator.validator
 import com.ekino.oss.jcv.db.assertj.DbComparatorAssertJ.Companion.assertThatTable
 import com.ekino.oss.jcv.db.assertj.extension.AssertDbExtension
-import com.ekino.oss.jcv.db.assertj.extension.KPostgreSQLContainer
 import com.ekino.oss.jcv.db.assertj.mapper.PostgresMapper
 import org.assertj.db.type.Table
 import org.assertj.db.type.Value
@@ -13,10 +12,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 import org.skyscreamer.jsonassert.ValueMatcherException
-import org.testcontainers.junit.jupiter.Container
-import org.testcontainers.junit.jupiter.Testcontainers
 
-@Testcontainers
 class PostgresTypeTest {
 
     @RegisterExtension
@@ -24,19 +20,13 @@ class PostgresTypeTest {
     val assertDb = AssertDbExtension()
 
     companion object {
-        @JvmStatic
-        @Container
-        val postgreContainer: KPostgreSQLContainer = KPostgreSQLContainer(
-            "postgres:11.1"
-        )
-            .withDatabaseName("postgres-test")
-            .withUsername("postgres-user")
-            .withPassword("postgres-password")
-            .withInitScript("com/ekino/oss/jcv/db/assertj/postgre/postgre_db_test.sql")
+        const val JDBC_URL = "jdbc:postgresql://localhost:5432/postgres-test?loggerLevel=OFF"
+        const val USERNAME = "postgres-user"
+        const val PASSWORD = "postgres-password"
     }
 
     @BeforeEach
-    fun setDbInformation() = assertDb.withDbInformation(postgreContainer.jdbcUrl, postgreContainer.username, postgreContainer.password)
+    fun setDbInformation() = assertDb.withDbInformation(JDBC_URL, USERNAME, PASSWORD)
 
     @Test
     fun `Should test most use type of postgresql database`() {
