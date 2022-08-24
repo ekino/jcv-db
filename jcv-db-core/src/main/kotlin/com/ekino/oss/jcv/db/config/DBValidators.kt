@@ -7,8 +7,6 @@ import com.ekino.oss.jcv.db.config.comparator.JsonObjectComparator
 
 object DBValidators {
 
-    private const val mongoDefaultIdRegex = "^[a-f\\d]{24}$"
-
     @JvmStatic
     fun defaultDBValidators() = validators {
         +defaultValidators()

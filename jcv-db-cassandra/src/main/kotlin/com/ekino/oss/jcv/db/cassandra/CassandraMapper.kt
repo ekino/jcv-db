@@ -43,7 +43,10 @@ open class CassandraMapper : TypeMapper {
 
     protected fun handleLinkedHashMap(value: LinkedHashMap<*, *>) = value.map { it.key.toString() to getValueFromColumn(it.value) }.toMap().toJSONObject()
 
-    protected fun handleCustomType(value: DefaultUdtValue) = value.type.fieldNames.map { it.asInternal() to getValueFromColumn(value.getObject(it) ?: "null") }.toMap().toJSONObject()
+    protected fun handleCustomType(value: DefaultUdtValue) = value.type.fieldNames
+        .map { it.asInternal() to getValueFromColumn(value.getObject(it) ?: "null") }
+        .toMap()
+        .toJSONObject()
 
     protected fun handleInetAdress(value: Inet4Address) = value.toString().removePrefix("/")
 

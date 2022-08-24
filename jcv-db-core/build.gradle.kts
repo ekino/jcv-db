@@ -7,12 +7,17 @@ plugins {
     signing
     jacoco
     id("org.jetbrains.dokka")
+    id("com.ekino.oss.plugin.kotlin-quality")
 }
 
 configurations {
     implementation {
         resolutionStrategy.failOnVersionConflict()
     }
+}
+
+kotlinQuality {
+    customDetektConfig = "config/detekt.yml"
 }
 
 val javadocJar by tasks.registering(Jar::class) {
@@ -57,7 +62,7 @@ publishing {
     publications {
         named<MavenPublication>(publicationName) {
             artifact(javadocJar.get())
-            
+
             from(components["java"])
         }
     }
@@ -77,7 +82,7 @@ dependencies {
     implementation(group = "commons-io", name = "commons-io", version = "2.6")
     implementation(group = "com.fasterxml.jackson.core", name = "jackson-databind", version = "2.10.1")
 
-    implementation(group = "org.locationtech.jts", name = "jts-core", version =  "1.16.1")
+    implementation(group = "org.locationtech.jts", name = "jts-core", version = "1.16.1")
 
     testImplementation(group = "org.junit.jupiter", name = "junit-jupiter", version = "${project.extra["junit.version"]}")
 

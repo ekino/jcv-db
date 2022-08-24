@@ -132,7 +132,7 @@ class MySQLTypeTest {
                 "content": "content 4"
               }
             ]
-        """.trimIndent()
+            """.trimIndent()
         assertThatQuery("SELECT * FROM table_test WHERE criteria_number > 1")
             .isValidAgainst(expected)
     }
@@ -159,7 +159,7 @@ class MySQLTypeTest {
                 "content": "content 4"
               }
             ]
-        """.trimIndent()
+            """.trimIndent()
         assertThatQuery("SELECT id, content FROM table_test")
             .isValidAgainst(expected)
     }
@@ -190,7 +190,7 @@ class MySQLTypeTest {
                   "content": "content 1"
                 }
               ]
-        """.trimIndent()
+            """.trimIndent()
         assertThatQuery("SELECT * FROM table_test ORDER BY criteria_number DESC")
             .isValidAgainst(expected)
     }
@@ -221,7 +221,7 @@ class MySQLTypeTest {
                   "content": "content 1"
                 }
               ]
-        """.trimIndent()
+            """.trimIndent()
         assertThatThrownBy {
             assertThatQuery("SELECT * FROM table_test ORDER BY criteria_number DESC")
                 .isValidAgainst(expected)
@@ -239,7 +239,7 @@ class MySQLTypeTest {
                   "content": "content 1"
                 }
               ]
-        """.trimIndent()
+            """.trimIndent()
 
         DBComparatorBuilder
             .create()
@@ -274,7 +274,7 @@ class MySQLTypeTest {
                   "content": "content 4 CUSTOM"
                 }
               ]
-        """.trimIndent()
+            """.trimIndent()
         assertThatQuery("SELECT * FROM table_test")
             .using(CustomMySQLMapper())
             .isValidAgainst(expected)
@@ -306,7 +306,7 @@ class MySQLTypeTest {
                   "content": "{#custom_notempty#}"
                 }
               ]
-        """.trimIndent()
+            """.trimIndent()
         assertThatQuery("SELECT * FROM table_test")
             .using(customValidator())
             .isValidAgainst(expected)
@@ -321,7 +321,7 @@ class MySQLTypeTest {
                 "criteria_number": 0,
                 "content": "content 1"
               }
-        """.trimIndent()
+            """.trimIndent()
 
         assertThatQuery("SELECT * FROM table_test WHERE id=1234")
             .isValidAgainst(expected)
@@ -329,12 +329,15 @@ class MySQLTypeTest {
 
     private fun customValidator(): JsonValidator<String> {
         return validator {
-            templatedValidator<String>("custom_notempty", comparator { actual, expected ->
-                if (actual == null || actual.isEmpty()) {
-                    throw ValueMatcherException("Value is null or empty", expected, actual)
+            templatedValidator<String>(
+                "custom_notempty",
+                comparator { actual, expected ->
+                    if (actual == null || actual.isEmpty()) {
+                        throw ValueMatcherException("Value is null or empty", expected, actual)
+                    }
+                    true
                 }
-                true
-            })
+            )
         }
     }
 

@@ -50,7 +50,8 @@ class DbComparatorCassandra(
 
     fun using(mapper: CassandraMapper) = using(jsonComparator, mapper, queryConverter)
 
-    fun using(dataSource: CassandraDataSource) = using(jsonComparator, mapper,
+    fun using(dataSource: CassandraDataSource) = using(
+        jsonComparator, mapper,
         QueryConverter(dataSource)
     )
 

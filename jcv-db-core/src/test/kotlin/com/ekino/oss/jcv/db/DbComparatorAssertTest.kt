@@ -16,7 +16,7 @@ class DbComparatorAssertTest {
     @DisplayName("Should test types for postgresql database")
     fun shouldTestNumericTypesPostGreSQL() {
         val expected = // language=json
-        """
+            """
             [  
                 {    
                     "id": "{#uuid#}",    
@@ -48,7 +48,7 @@ class DbComparatorAssertTest {
                     }  
                 }
             ]
-        """.trimIndent()
+            """.trimIndent()
 
         val tableModel = TableModel()
         tableModel.addRow(
@@ -91,25 +91,27 @@ class DbComparatorAssertTest {
                     "content_test": "abcd"
                 }
             ]
-        """.trimIndent()
+            """.trimIndent()
 
         val tableModel = TableModel()
-            tableModel.addRow(
-                RowModel(
-                    mutableMapOf(
-                        "content_test" to "abcde"
+        tableModel.addRow(
+            RowModel(
+                mutableMapOf(
+                    "content_test" to "abcde"
                 )
             )
         )
 
         assertThat {
             DbComparatorAssert.assertThatTableModel(tableModel).isValidAgainst(expected)
-        }.isFailure().hasMessage("""[content_test=abcd]
+        }.isFailure().hasMessage(
+            """[content_test=abcd]
 Expected: a JSON object
      but none found
  ; [content_test=abcde]
 Unexpected: a JSON object
 
-Actual: [{"content_test":"abcde"}]""")
+Actual: [{"content_test":"abcde"}]"""
+        )
     }
 }

@@ -115,7 +115,7 @@ class PostgresTypeTest {
                 "content": "content 4"
               }
             ]
-        """.trimIndent()
+            """.trimIndent()
         assertThatQuery("SELECT * FROM table_test WHERE criteria_number > 1")
             .isValidAgainst(expected)
     }
@@ -142,7 +142,7 @@ class PostgresTypeTest {
                 "content": "content 4"
               }
             ]
-        """.trimIndent()
+            """.trimIndent()
         assertThatQuery("SELECT id, content FROM table_test")
             .isValidAgainst(expected)
     }
@@ -173,7 +173,7 @@ class PostgresTypeTest {
                   "content": "content 1"
                 }
               ]
-        """.trimIndent()
+            """.trimIndent()
         assertThatQuery("SELECT * FROM table_test ORDER BY criteria_number DESC")
             .isValidAgainst(expected)
     }
@@ -204,7 +204,7 @@ class PostgresTypeTest {
                   "content": "content 1"
                 }
               ]
-        """.trimIndent()
+            """.trimIndent()
         assertThatThrownBy {
             assertThatQuery("SELECT * FROM table_test ORDER BY criteria_number DESC")
                 .isValidAgainst(expected)
@@ -222,7 +222,7 @@ class PostgresTypeTest {
                   "content": "content 1"
                 }
               ]
-        """.trimIndent()
+            """.trimIndent()
 
         DBComparatorBuilder
             .create()
@@ -257,7 +257,7 @@ class PostgresTypeTest {
                   "content": "content 4 CUSTOM"
                 }
               ]
-        """.trimIndent()
+            """.trimIndent()
         assertThatQuery("SELECT * FROM table_test")
             .using(CustomPostgreSQLMapper())
             .isValidAgainst(expected)
@@ -289,7 +289,7 @@ class PostgresTypeTest {
                   "content": "{#custom_notempty#}"
                 }
               ]
-        """.trimIndent()
+            """.trimIndent()
         assertThatQuery("SELECT * FROM table_test")
             .using(customValidator())
             .isValidAgainst(expected)
@@ -304,7 +304,7 @@ class PostgresTypeTest {
                 "criteria_number": 0,
                 "content": "content 1"
               }
-        """.trimIndent()
+            """.trimIndent()
 
         assertThatQuery("SELECT * FROM table_test WHERE id='07621b34-35dc-4b8f-94f4-b0f7e98b4088'")
             .isValidAgainst(expected)
@@ -312,12 +312,15 @@ class PostgresTypeTest {
 
     private fun customValidator(): JsonValidator<String> {
         return validator {
-            templatedValidator<String>("custom_notempty", comparator { actual, expected ->
-                if (actual == null || actual.isEmpty()) {
-                    throw ValueMatcherException("Value is null or empty", expected, actual)
+            templatedValidator<String>(
+                "custom_notempty",
+                comparator { actual, expected ->
+                    if (actual == null || actual.isEmpty()) {
+                        throw ValueMatcherException("Value is null or empty", expected, actual)
+                    }
+                    true
                 }
-                true
-            })
+            )
         }
     }
 
