@@ -1,0 +1,77 @@
+version: '3.8'
+
+services:
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2017-latest
+    command: /bin/bash ./entrypoint.sh
+    ports:
+      - '1433:1433'
+    environment:
+      ACCEPT_EULA: Y
+      MSSQL_PID: Express
+      SA_PASSWORD: A_Str0ng_Required_Password
+    volumes:
+      - ./docker/mssql/entrypoint.sh:/entrypoint.sh
+      - ./docker/mssql/db-init.sh:/db-init.sh
+      - ./docker/mssql/setup.sql:/setup.sql
+    healthcheck:
+      test: /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "A_Str0ng_Required_Password" -Q "SELECT 1" || exit 1
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+
+  mysql:
+    image: mysql:8.0
+    ports:
+      - '3306:3306'
+    environment:
+      MYSQL_ROOT_PASSWORD: mysql-password
+      MYSQL_DATABASE: mysql-text
+      MYSQL_USER: mysql-user
+      MYSQL_PASSWORD: mysql-password
+    depends_on:
+      mssql:
+        condition: service_healthy
+    volumes:
+      - ./docker/mysql/setup.sql:/docker-entrypoint-initdb.d/setup.sql
+
+  postgresql:
+    image: postgres:11.1
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_DB: postgres-test
+      POSTGRES_USER: postgres-user
+      POSTGRES_PASSWORD: postgres-password
+    volumes:
+      - ./docker/postgresql/setup.sql:/docker-entrypoint-initdb.d/setup.sql
+
+  mongodb:
+    image: mongo:3.1.5
+    ports:
+      - '27017:27017'
+
+  cassandra:
+    image: cassandra:latest
+    container_name: cassandra
+    ports:
+      - '9042:9042'
+    environment:
+      CASSANDRA_DC: local
+      CASSANDRA_ENDPOINT_SNITCH: GossipingPropertyFileSnitch
+    healthcheck:
+      test: [ "CMD", "cqlsh", "-u cassandra", "-p cassandra" ,"-e describe keyspaces" ]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+
+  cassandra-load-keyspace:
+    container_name: cassandra-load-keyspace
+    image: cassandra:latest
+    depends_on:
+      cassandra:
+        condition: service_healthy
+    volumes:
+      - ./docker/cassandra/setup.cql:/setup.cql
+    command: /bin/bash -c "echo loading cassandra keyspace && cqlsh cassandra -f /setup.cql"

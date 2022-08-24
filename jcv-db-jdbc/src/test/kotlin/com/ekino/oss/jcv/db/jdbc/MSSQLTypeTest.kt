@@ -3,31 +3,26 @@ package com.ekino.oss.jcv.db.jdbc
 import com.ekino.oss.jcv.core.JsonValidator
 import com.ekino.oss.jcv.core.validator.comparator
 import com.ekino.oss.jcv.core.validator.validator
-import com.ekino.oss.jcv.db.jdbc.extension.KMSSQLContainer
 import com.ekino.oss.jcv.db.jdbc.mapper.MSSQLMapper
 import com.ekino.oss.jcv.db.jdbc.util.DBComparatorBuilder
 import com.ekino.oss.jcv.db.util.takeIfIsJson
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.ValueMatcherException
-import org.testcontainers.junit.jupiter.Container
-import org.testcontainers.junit.jupiter.Testcontainers
 import java.sql.DriverManager
 import java.util.UUID
 
-@Testcontainers
 class MSSQLTypeTest {
 
     companion object {
-        @JvmField
-        @Container
-        val msSQLContainer: KMSSQLContainer = KMSSQLContainer("mcr.microsoft.com/mssql/server:2017-latest")
-            .withInitScript("com/ekino/oss/jcv/db/jdbc/mssql/mssql_db_test.sql")
+        const val JDBC_URL = "jdbc:sqlserver://localhost:1433"
+        const val USERNAME = "SA"
+        const val PASSWORD = "A_Str0ng_Required_Password"
     }
 
     private fun assertThatQuery(query: String) = DBComparatorBuilder
         .create()
-        .connection(DriverManager.getConnection(msSQLContainer.jdbcUrl, msSQLContainer.username, msSQLContainer.password))
+        .connection(DriverManager.getConnection(JDBC_URL, USERNAME, PASSWORD))
         .build(query)
 
     @Test
@@ -232,10 +227,6 @@ class MSSQLTypeTest {
 
     @Test
     fun `Should valid table against json with custom connection`() {
-        val msSQLContainerSecond: KMSSQLContainer = KMSSQLContainer("mcr.microsoft.com/mssql/server:2017-latest")
-            .withInitScript("com/ekino/oss/jcv/db/jdbc/mssql/mssql_db_test_second.sql")
-        msSQLContainerSecond.start()
-
         val expected = // language=json
             """
               [
@@ -246,11 +237,12 @@ class MSSQLTypeTest {
                 }
               ]
         """.trimIndent()
-        assertThatQuery("SELECT * FROM table_test_second")
-            .using(DriverManager.getConnection(msSQLContainerSecond.jdbcUrl, msSQLContainerSecond.username, msSQLContainerSecond.password))
-            .isValidAgainst(expected)
 
-        msSQLContainerSecond.stop()
+        DBComparatorBuilder
+            .create()
+            .build("SELECT * FROM table_test WHERE id = 'A849D2F7-7814-4D37-989E-A7D6EE4B5E05'")
+            .using(DriverManager.getConnection(JDBC_URL, USERNAME, PASSWORD))
+            .isValidAgainst(expected)
     }
 
     @Test

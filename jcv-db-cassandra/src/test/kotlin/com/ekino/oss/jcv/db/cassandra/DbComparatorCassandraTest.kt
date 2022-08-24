@@ -4,32 +4,24 @@ import com.datastax.oss.driver.api.querybuilder.QueryBuilder
 import com.ekino.oss.jcv.db.cassandra.util.CassandraDataSource
 import com.ekino.oss.jcv.db.cassandra.util.DBComparatorBuilder
 import org.junit.jupiter.api.Test
-import org.testcontainers.containers.CassandraContainer
-import org.testcontainers.junit.jupiter.Container
-import org.testcontainers.junit.jupiter.Testcontainers
 
-@Testcontainers
 class DbComparatorCassandraTest {
 
     companion object {
-
-        @JvmStatic
-        @Container
-        val cassandraContainer: KCassandraContainer = KCassandraContainer(
-            "cassandra:latest"
-        )
-            .withEnv("CASSANDRA_DC", "local")
-            .withEnv("CASSANDRA_ENDPOINT_SNITCH", "GossipingPropertyFileSnitch")
-            .withInitScript("com/ekino/oss/jcv/db/cassandra/cassandra_db_test.cql")
+        const val CASSANDRA_DC = "local"
+        const val CASSANDRA_IP_ADDRESS = "localhost"
+        const val CASSANDRA_PORT = 9042
     }
 
     private fun assertThatQuery(query: String) = DBComparatorBuilder
         .create()
-        .datasource(CassandraDataSource(
-                cassandraContainer.envMap["CASSANDRA_DC"] ?: "",
-                cassandraContainer.containerIpAddress,
-                cassandraContainer.getMappedPort(CassandraContainer.CQL_PORT)
-                ))
+        .datasource(
+            CassandraDataSource(
+                CASSANDRA_DC,
+                CASSANDRA_IP_ADDRESS,
+                CASSANDRA_PORT
+            )
+        )
         .build(query)
 
     @Test
@@ -162,11 +154,13 @@ class DbComparatorCassandraTest {
         }]""".trimIndent()
 
         DbComparatorCassandra.assertThatQuery(QueryBuilder.selectFrom("cassandratest", "cassandra_table_type").all())
-            .using(CassandraDataSource(
-                cassandraContainer.envMap["CASSANDRA_DC"] ?: "",
-                cassandraContainer.containerIpAddress,
-                cassandraContainer.getMappedPort(CassandraContainer.CQL_PORT)
-                ))
+            .using(
+                CassandraDataSource(
+                    CASSANDRA_DC,
+                    CASSANDRA_IP_ADDRESS,
+                    CASSANDRA_PORT
+                )
+            )
             .isValidAgainst(expected)
     }
 
@@ -192,11 +186,13 @@ class DbComparatorCassandraTest {
             ]""".trimIndent()
 
         DbComparatorCassandra.assertThatQuery("SELECT * FROM cassandratest.table_test WHERE content = 'content 1';")
-            .using(CassandraDataSource(
-                cassandraContainer.envMap["CASSANDRA_DC"] ?: "",
-                cassandraContainer.containerIpAddress,
-                cassandraContainer.getMappedPort(CassandraContainer.CQL_PORT)
-            ))
+            .using(
+                CassandraDataSource(
+                    CASSANDRA_DC,
+                    CASSANDRA_IP_ADDRESS,
+                    CASSANDRA_PORT
+                )
+            )
             .isValidAgainst(expected)
     }
 
@@ -222,11 +218,13 @@ class DbComparatorCassandraTest {
             ]""".trimIndent()
 
         DbComparatorCassandra.assertThatQuery("SELECT * FROM cassandratest.table_test WHERE content = 'content 1' ORDER BY criteria_number DESC;")
-            .using(CassandraDataSource(
-                cassandraContainer.envMap["CASSANDRA_DC"] ?: "",
-                cassandraContainer.containerIpAddress,
-                cassandraContainer.getMappedPort(CassandraContainer.CQL_PORT)
-            ))
+            .using(
+                CassandraDataSource(
+                    CASSANDRA_DC,
+                    CASSANDRA_IP_ADDRESS,
+                    CASSANDRA_PORT
+                )
+            )
             .isValidAgainst(expected)
     }
 }

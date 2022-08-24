@@ -5,17 +5,13 @@ import com.ekino.oss.jcv.core.validator.comparator
 import com.ekino.oss.jcv.core.validator.validator
 import com.ekino.oss.jcv.db.assertj.DbComparatorAssertJ.Companion.assertThatTable
 import com.ekino.oss.jcv.db.assertj.extension.AssertDbExtension
-import com.ekino.oss.jcv.db.assertj.extension.KMySQLContainer
 import org.assertj.db.type.Table
 import org.assertj.db.type.Value
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 import org.skyscreamer.jsonassert.ValueMatcherException
-import org.testcontainers.junit.jupiter.Container
-import org.testcontainers.junit.jupiter.Testcontainers
 
-@Testcontainers
 class MySQLTypeTest {
 
     @RegisterExtension
@@ -23,20 +19,14 @@ class MySQLTypeTest {
     val assertDb = AssertDbExtension()
 
     companion object {
-        @JvmField
-        @Container
-        val mySQLContainer: KMySQLContainer = KMySQLContainer(
-            "mysql:8.0"
-        )
-            .withDatabaseName("mysql-text")
-            .withUsername("mysql-user")
-            .withPassword("mysql-password")
-            .withInitScript("com/ekino/oss/jcv/db/assertj/mysql/mysql_db_test.sql")
+        const val JDBC_URL = "jdbc:mysql://localhost:3306/mysql-text"
+        const val USERNAME = "mysql-user"
+        const val PASSWORD = "mysql-password"
     }
 
     @BeforeEach
     fun setDbInformation() {
-        assertDb.withDbInformation(mySQLContainer.jdbcUrl, mySQLContainer.username, mySQLContainer.password)
+        assertDb.withDbInformation(JDBC_URL, USERNAME, PASSWORD)
     }
 
     @Test
