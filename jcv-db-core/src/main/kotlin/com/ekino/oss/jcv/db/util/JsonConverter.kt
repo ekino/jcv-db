@@ -10,14 +10,13 @@ import org.skyscreamer.jsonassert.JSONCompare
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStream
-import kotlin.test.fail
 
 object JsonConverter {
 
     fun compareJsonAndLogResult(actual: JSONArray, expected: JSONArray, jsonComparator: JsonComparator) {
         JSONCompare.compareJSON(expected, actual, jsonComparator)
             .takeUnless { it.passed() }
-            ?.also { fail("${it.message}\nActual: $actual") }
+            ?.also { throw AssertionError("${it.message}\nActual: $actual") }
     }
 
     fun formatInput(input: String) = when (val json = input.takeIfIsJson()) {
