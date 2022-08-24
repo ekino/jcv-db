@@ -29,7 +29,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation("org.skyscreamer:jsonassert:$jsonassertVersion")
     testImplementation("com.ekino.oss.jcv:jcv-core:$jcvVersion")
-    testImplementation("com.ekino.oss.jcv-db:jcv-db-jdbc:0.0.4")
+    testImplementation("com.ekino.oss.jcv-db:jcv-db-jdbc:0.0.5")
     testImplementation("commons-io:commons-io:2.6")
 }
 
