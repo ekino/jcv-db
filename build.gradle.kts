@@ -20,7 +20,6 @@ allprojects {
     project.extra.set("mssql.version", "7.4.1.jre8")
     project.extra.set("mysql.version", "8.0.18")
     project.extra.set("junit.version", "5.5.2")
-    project.extra.set("testcontainers.version", "1.12.4")
 }
 
 tasks.create("printVersion") {

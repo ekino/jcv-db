@@ -74,7 +74,4 @@ dependencies {
     implementation("com.datastax.oss:java-driver-query-builder:4.3.1")
 
     testImplementation(group = "org.junit.jupiter", name = "junit-jupiter", version = "${project.extra["junit.version"]}")
-    testImplementation(group = "org.testcontainers", name = "junit-jupiter", version = "${project.extra["testcontainers.version"]}")
-    testImplementation(group = "org.testcontainers", name = "testcontainers", version = "${project.extra["testcontainers.version"]}")
-    testImplementation(group = "org.testcontainers", name = "cassandra", version = "${project.extra["testcontainers.version"]}")
 }

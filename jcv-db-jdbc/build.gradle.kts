@@ -78,10 +78,5 @@ dependencies {
     implementation(group = "com.fasterxml.jackson.core", name = "jackson-databind", version = "2.10.1")
 
     testImplementation(group = "org.junit.jupiter", name = "junit-jupiter", version = "${project.extra["junit.version"]}")
-    testImplementation(group = "org.testcontainers", name = "junit-jupiter", version = "${project.extra["testcontainers.version"]}")
-    testImplementation(group = "org.testcontainers", name = "testcontainers", version = "${project.extra["testcontainers.version"]}")
-    testImplementation(group = "org.testcontainers", name = "postgresql", version = "${project.extra["testcontainers.version"]}")
-    testImplementation(group = "org.testcontainers", name = "mysql", version = "${project.extra["testcontainers.version"]}")
-    testImplementation(group = "org.testcontainers", name = "mssqlserver", version = "${project.extra["testcontainers.version"]}")
     testImplementation(group = "org.assertj", name = "assertj-core", version = "3.14.0")
 }

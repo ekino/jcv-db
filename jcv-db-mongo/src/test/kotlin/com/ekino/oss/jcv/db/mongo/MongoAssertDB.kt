@@ -7,24 +7,17 @@ import com.mongodb.client.model.Sorts.descending
 import org.bson.Document
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
-import org.testcontainers.junit.jupiter.Container
-import org.testcontainers.junit.jupiter.Testcontainers
 
-@Testcontainers
 class MongoAssertDB {
 
     companion object {
-        @Container
-        @JvmStatic
-        val mongoContainer: KGenericContainer = KGenericContainer(
-            "mongo:3.1.5"
-        )
-            .withExposedPorts(27017)
+        const val ADDRESS = "localhost:27017"
+        const val PORT = 27017
 
         @BeforeAll
         @JvmStatic
         fun setUpMongoData() {
-            val mongoClient = MongoClient(mongoContainer.containerIpAddress, mongoContainer.getMappedPort(27017))
+            val mongoClient = MongoClient(ADDRESS, PORT)
 
             val document1 = Document("name", "test-mongo-db")
             val document2 = Document("name", "test-mongo-db-2")
@@ -49,7 +42,7 @@ class MongoAssertDB {
     @Test
     fun `Should assert mongo collection`() {
 
-        val mongoClient = MongoClient(mongoContainer.containerIpAddress, mongoContainer.getMappedPort(27017))
+        val mongoClient = MongoClient(ADDRESS, PORT)
         val database = mongoClient.getDatabase("test")
 
         val expected = // language=json
@@ -90,7 +83,7 @@ class MongoAssertDB {
     @Test
     fun `Should assert single document`() {
 
-        val mongoClient = MongoClient(mongoContainer.containerIpAddress, mongoContainer.getMappedPort(27017))
+        val mongoClient = MongoClient(ADDRESS, PORT)
         val database = mongoClient.getDatabase("test")
 
         val expected = // language=json
@@ -107,7 +100,7 @@ class MongoAssertDB {
     @Test
     fun `Should validate document with json object field`() {
 
-        val mongoClient = MongoClient(mongoContainer.containerIpAddress, mongoContainer.getMappedPort(27017))
+        val mongoClient = MongoClient(ADDRESS, PORT)
         val database = mongoClient.getDatabase("test")
 
         val expected = // language=json
@@ -132,7 +125,7 @@ class MongoAssertDB {
     @Test
     fun `Should validate document with json array field`() {
 
-        val mongoClient = MongoClient(mongoContainer.containerIpAddress, mongoContainer.getMappedPort(27017))
+        val mongoClient = MongoClient(ADDRESS, PORT)
         val database = mongoClient.getDatabase("test")
 
         val expected = // language=json
@@ -157,7 +150,7 @@ class MongoAssertDB {
     @Test
     fun `Should validate document with json object validator`() {
 
-        val mongoClient = MongoClient(mongoContainer.containerIpAddress, mongoContainer.getMappedPort(27017))
+        val mongoClient = MongoClient(ADDRESS, PORT)
         val database = mongoClient.getDatabase("test")
 
         val expected = // language=json
@@ -180,7 +173,7 @@ class MongoAssertDB {
     @Test
     fun `Should validate document with json array validator`() {
 
-        val mongoClient = MongoClient(mongoContainer.containerIpAddress, mongoContainer.getMappedPort(27017))
+        val mongoClient = MongoClient(ADDRESS, PORT)
         val database = mongoClient.getDatabase("test")
 
         val expected = // language=json
@@ -199,7 +192,7 @@ class MongoAssertDB {
 
     @Test
     fun `Should assert request with field restriction`() {
-        val mongoClient = MongoClient(mongoContainer.containerIpAddress, mongoContainer.getMappedPort(27017))
+        val mongoClient = MongoClient(ADDRESS, PORT)
         val database = mongoClient.getDatabase("test")
 
         val expected = // language=json
@@ -229,7 +222,7 @@ class MongoAssertDB {
 
     @Test
     fun `Should assert request with ordering`() {
-        val mongoClient = MongoClient(mongoContainer.containerIpAddress, mongoContainer.getMappedPort(27017))
+        val mongoClient = MongoClient(ADDRESS, PORT)
         val database = mongoClient.getDatabase("test")
 
         val expected = // language=json
