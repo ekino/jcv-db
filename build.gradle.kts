@@ -2,7 +2,8 @@ import net.researchgate.release.ReleasePlugin
 
 plugins {
     base
-    kotlin("jvm") version "1.3.50"
+    kotlin("jvm") version "1.7.10"
+    id("org.jetbrains.dokka") version "1.7.10" apply false
     id("net.researchgate.release") version "2.8.1"
 }
 
