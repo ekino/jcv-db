@@ -79,9 +79,4 @@ dependencies {
     implementation(group = "mysql", name = "mysql-connector-java", version = "${project.extra["mysql.version"]}")
 
     testImplementation(group = "org.junit.jupiter", name = "junit-jupiter", version = "${project.extra["junit.version"]}")
-    testImplementation(group = "org.testcontainers", name = "junit-jupiter", version = "${project.extra["testcontainers.version"]}")
-    testImplementation(group = "org.testcontainers", name = "testcontainers", version = "${project.extra["testcontainers.version"]}")
-    testImplementation(group = "org.testcontainers", name = "postgresql", version = "${project.extra["testcontainers.version"]}")
-    testImplementation(group = "org.testcontainers", name = "mysql", version = "${project.extra["testcontainers.version"]}")
-    testImplementation(group = "org.testcontainers", name = "mssqlserver", version = "${project.extra["testcontainers.version"]}")
 }

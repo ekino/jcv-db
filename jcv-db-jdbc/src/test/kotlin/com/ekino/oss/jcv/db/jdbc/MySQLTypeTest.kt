@@ -3,34 +3,26 @@ package com.ekino.oss.jcv.db.jdbc
 import com.ekino.oss.jcv.core.JsonValidator
 import com.ekino.oss.jcv.core.validator.comparator
 import com.ekino.oss.jcv.core.validator.validator
-import com.ekino.oss.jcv.db.jdbc.extension.KMySQLContainer
 import com.ekino.oss.jcv.db.jdbc.mapper.MySQLMapper
 import com.ekino.oss.jcv.db.jdbc.util.DBComparatorBuilder
 import com.ekino.oss.jcv.db.util.takeIfIsJson
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.ValueMatcherException
-import org.testcontainers.junit.jupiter.Container
-import org.testcontainers.junit.jupiter.Testcontainers
 import java.sql.DriverManager
 import java.util.UUID
 
-@Testcontainers
 class MySQLTypeTest {
 
     companion object {
-        @JvmField
-        @Container
-        val mySQLContainer: KMySQLContainer = KMySQLContainer("mysql:8.0")
-            .withDatabaseName("mysql-text")
-            .withUsername("mysql-user")
-            .withPassword("mysql-password")
-            .withInitScript("com/ekino/oss/jcv/db/jdbc/mysql/mysql_db_test.sql")
+        const val JDBC_URL = "jdbc:mysql://localhost:3306/mysql-text"
+        const val USERNAME = "mysql-user"
+        const val PASSWORD = "mysql-password"
     }
 
     private fun assertThatQuery(query: String) = DBComparatorBuilder
         .create()
-        .connection(DriverManager.getConnection(mySQLContainer.jdbcUrl, mySQLContainer.username, mySQLContainer.password))
+        .connection(DriverManager.getConnection(JDBC_URL, USERNAME, PASSWORD))
         .build(query)
 
     @Test
@@ -238,28 +230,22 @@ class MySQLTypeTest {
 
     @Test
     fun `Should valid table against json with custom connection`() {
-        val mySQLContainerSecond: KMySQLContainer = KMySQLContainer("mysql:8.0")
-            .withDatabaseName("mysql-text-second")
-            .withUsername("mysql-user-second")
-            .withPassword("mysql-password-second")
-            .withInitScript("com/ekino/oss/jcv/db/jdbc/mysql/mysql_db_test_second.sql")
-        mySQLContainerSecond.start()
-
         val expected = // language=json
             """
               [
                 {
-                  "id": 1,
+                  "id": 1234,
                   "criteria_number": 0,
                   "content": "content 1"
                 }
               ]
         """.trimIndent()
-        assertThatQuery("SELECT * FROM table_test_second")
-            .using(DriverManager.getConnection(mySQLContainerSecond.jdbcUrl, mySQLContainerSecond.username, mySQLContainerSecond.password))
-            .isValidAgainst(expected)
 
-        mySQLContainerSecond.stop()
+        DBComparatorBuilder
+            .create()
+            .build("SELECT * FROM table_test WHERE id = 1234")
+            .using(DriverManager.getConnection(JDBC_URL, USERNAME, PASSWORD))
+            .isValidAgainst(expected)
     }
 
     @Test

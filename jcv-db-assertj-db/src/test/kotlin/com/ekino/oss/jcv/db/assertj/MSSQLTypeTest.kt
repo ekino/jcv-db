@@ -5,17 +5,13 @@ import com.ekino.oss.jcv.core.validator.comparator
 import com.ekino.oss.jcv.core.validator.validator
 import com.ekino.oss.jcv.db.assertj.DbComparatorAssertJ.Companion.assertThatTable
 import com.ekino.oss.jcv.db.assertj.extension.AssertDbExtension
-import com.ekino.oss.jcv.db.assertj.extension.KMSSQLContainer
 import org.assertj.db.type.Table
 import org.assertj.db.type.Value
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 import org.skyscreamer.jsonassert.ValueMatcherException
-import org.testcontainers.junit.jupiter.Container
-import org.testcontainers.junit.jupiter.Testcontainers
 
-@Testcontainers
 class MSSQLTypeTest {
 
     @RegisterExtension
@@ -23,17 +19,14 @@ class MSSQLTypeTest {
     val assertDb = AssertDbExtension()
 
     companion object {
-        @JvmField
-        @Container
-        val msSQLContainer: KMSSQLContainer = KMSSQLContainer(
-            "mcr.microsoft.com/mssql/server:2017-latest"
-        )
-            .withInitScript("com/ekino/oss/jcv/db/assertj/mssql/mssql_db_test.sql")
+        const val JDBC_URL = "jdbc:sqlserver://localhost:1433"
+        const val USERNAME = "SA"
+        const val PASSWORD = "A_Str0ng_Required_Password"
     }
 
     @BeforeEach
     fun setDbInformation() {
-        assertDb.withDbInformation(msSQLContainer.jdbcUrl, msSQLContainer.username, msSQLContainer.password)
+        assertDb.withDbInformation(JDBC_URL, USERNAME, PASSWORD)
     }
 
     @Test

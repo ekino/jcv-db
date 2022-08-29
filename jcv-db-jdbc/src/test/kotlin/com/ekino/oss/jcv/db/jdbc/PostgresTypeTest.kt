@@ -4,7 +4,6 @@ import com.ekino.oss.jcv.core.JsonValidator
 import com.ekino.oss.jcv.core.validator.comparator
 import com.ekino.oss.jcv.core.validator.validator
 import com.ekino.oss.jcv.db.exception.DbAssertException
-import com.ekino.oss.jcv.db.jdbc.extension.KPostgreSQLContainer
 import com.ekino.oss.jcv.db.jdbc.mapper.PostgresMapper
 import com.ekino.oss.jcv.db.jdbc.util.DBComparatorBuilder
 import com.ekino.oss.jcv.db.util.takeIfIsJson
@@ -13,27 +12,20 @@ import org.junit.jupiter.api.Test
 import org.postgresql.util.PGInterval
 import org.postgresql.util.PGobject
 import org.skyscreamer.jsonassert.ValueMatcherException
-import org.testcontainers.junit.jupiter.Container
-import org.testcontainers.junit.jupiter.Testcontainers
 import java.sql.DriverManager
 import java.util.UUID
 
-@Testcontainers
 class PostgresTypeTest {
 
     companion object {
-        @JvmStatic
-        @Container
-        val postgreContainer: KPostgreSQLContainer = KPostgreSQLContainer("postgres:11.1")
-            .withDatabaseName("postgres-test")
-            .withUsername("postgres-user")
-            .withPassword("postgres-password")
-            .withInitScript("com/ekino/oss/jcv/db/jdbc/postgre/postgre_db_test.sql")
+        const val JDBC_URL = "jdbc:postgresql://localhost:5432/postgres-test?loggerLevel=OFF"
+        const val USERNAME = "postgres-user"
+        const val PASSWORD = "postgres-password"
     }
 
     private fun assertThatQuery(query: String) = DBComparatorBuilder
         .create()
-        .connection(DriverManager.getConnection(postgreContainer.jdbcUrl, postgreContainer.username, postgreContainer.password))
+        .connection(DriverManager.getConnection(JDBC_URL, USERNAME, PASSWORD))
         .build(query)
 
     @Test
@@ -221,13 +213,6 @@ class PostgresTypeTest {
 
     @Test
     fun `Should valid table against json with custom connection`() {
-        val postgreContainerSecond: KPostgreSQLContainer = KPostgreSQLContainer("postgres:11.1")
-            .withDatabaseName("postgres-test-second ")
-            .withUsername("postgres-user-second")
-            .withPassword("postgres-password-second")
-            .withInitScript("com/ekino/oss/jcv/db/jdbc/postgre/postgre_db_test_second.sql")
-        postgreContainerSecond.start()
-
         val expected = // language=json
             """
               [
@@ -238,11 +223,12 @@ class PostgresTypeTest {
                 }
               ]
         """.trimIndent()
-        assertThatQuery("SELECT * FROM table_test_second")
-            .using(DriverManager.getConnection(postgreContainerSecond.jdbcUrl, postgreContainerSecond.username, postgreContainerSecond.password))
-            .isValidAgainst(expected)
 
-        postgreContainerSecond.stop()
+        DBComparatorBuilder
+            .create()
+            .build("SELECT * FROM table_test WHERE id = '07621b34-35dc-4b8f-94f4-b0f7e98b4088'")
+            .using(DriverManager.getConnection(JDBC_URL, USERNAME, PASSWORD))
+            .isValidAgainst(expected)
     }
 
     @Test
