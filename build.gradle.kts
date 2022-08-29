@@ -5,7 +5,7 @@ plugins {
     kotlin("jvm") version "1.7.10"
     id("org.jetbrains.dokka") version "1.7.10" apply false
     id("com.ekino.oss.plugin.kotlin-quality") version "3.3.0" apply false
-    id("net.researchgate.release") version "2.8.1"
+    id("net.researchgate.release") version "3.0.1"
 }
 
 allprojects {
@@ -13,15 +13,14 @@ allprojects {
 
     repositories {
         mavenCentral()
-        jcenter()
     }
 
-    project.extra.set("jcv-core.version", "1.4.2")
+    project.extra.set("jcv-core.version", "1.5.0")
     project.extra.set("jsonassert.version", "1.5.0")
-    project.extra.set("postgres.version", "42.2.9")
-    project.extra.set("mssql.version", "7.4.1.jre8")
-    project.extra.set("mysql.version", "8.0.18")
-    project.extra.set("junit.version", "5.5.2")
+    project.extra.set("postgres.version", "42.5.0")
+    project.extra.set("mssql.version", "11.2.0.jre11")
+    project.extra.set("mysql.version", "8.0.29")
+    project.extra.set("junit.version", "5.9.0")
 }
 
 tasks.create("printVersion") {

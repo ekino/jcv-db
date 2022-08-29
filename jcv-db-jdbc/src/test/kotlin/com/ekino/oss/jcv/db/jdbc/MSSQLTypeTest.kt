@@ -15,7 +15,7 @@ import java.util.UUID
 class MSSQLTypeTest {
 
     companion object {
-        const val JDBC_URL = "jdbc:sqlserver://localhost:1433"
+        const val JDBC_URL = "jdbc:sqlserver://localhost:1433;encrypt=true;trustServerCertificate=true;"
         const val USERNAME = "SA"
         const val PASSWORD = "A_Str0ng_Required_Password"
     }

@@ -325,15 +325,15 @@ class PostgresTypeTest {
     }
 
     class CustomPostgreSQLMapper : PostgresMapper() {
-        override fun getValueFromColumn(value: Any): Any = when (value) {
+        override fun getValueFromColumn(value: Any): Any? = when (value) {
             is Float -> java.lang.Double.valueOf(value.toString())
             is Number -> value
             is Boolean -> value
             is UUID -> value.toString()
-            is PGobject -> value.value.takeIfIsJson() ?: throw DbAssertException(
+            is PGInterval -> value.value
+            is PGobject -> value.value?.takeIfIsJson() ?: throw DbAssertException(
                 "Unable to parse pg object to json"
             )
-            is PGInterval -> value.value
             else -> value.toString().trim { it <= ' ' } + " CUSTOM"
         }
     }

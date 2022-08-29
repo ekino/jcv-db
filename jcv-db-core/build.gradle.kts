@@ -74,19 +74,18 @@ signing {
 }
 
 dependencies {
-    implementation(kotlin("stdlib-jdk8", "1.3.50"))
-    implementation(kotlin("reflect", "1.3.50"))
+    implementation(kotlin("stdlib-jdk8"))
+    implementation(kotlin("reflect"))
 
     implementation(group = "com.ekino.oss.jcv", name = "jcv-core", version = "${project.extra["jcv-core.version"]}")
     implementation(group = "org.skyscreamer", name = "jsonassert", version = "${project.extra["jsonassert.version"]}")
-    implementation(group = "commons-io", name = "commons-io", version = "2.6")
-    implementation(group = "com.fasterxml.jackson.core", name = "jackson-databind", version = "2.10.1")
+    implementation(group = "com.fasterxml.jackson.core", name = "jackson-databind", version = "2.12.6.1")
 
-    implementation(group = "org.locationtech.jts", name = "jts-core", version = "1.16.1")
+    implementation(group = "org.locationtech.jts", name = "jts-core", version = "1.19.0")
 
     testImplementation(group = "org.junit.jupiter", name = "junit-jupiter", version = "${project.extra["junit.version"]}")
 
-    testImplementation(group = "com.willowtreeapps.assertk", name = "assertk-jvm", version = "0.20") {
+    testImplementation(group = "com.willowtreeapps.assertk", name = "assertk-jvm", version = "0.25") {
         exclude(group = "org.jetbrains.kotlin", module = "kotlin-reflect")
     }
 }

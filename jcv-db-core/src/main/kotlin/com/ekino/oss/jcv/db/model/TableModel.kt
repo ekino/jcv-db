@@ -21,7 +21,7 @@ data class TableModel(val rows: MutableSet<RowModel> = mutableSetOf()) {
     }
 
     private fun convertRowModelToJSONObject(row: RowModel, mapper: TypeMapper) = row.cells
-        .map { entry -> entry.key.toLowerCase() to getValueFromMapper(entry.value, mapper) }.toMap()
+        .map { entry -> entry.key.lowercase() to getValueFromMapper(entry.value, mapper) }.toMap()
         .let { map -> JSONObject(map) }
 
     private fun getValueFromMapper(value: Any?, mapper: TypeMapper) = value?.let { mapper.getValueFromColumn(it) } ?: JSONObject.NULL

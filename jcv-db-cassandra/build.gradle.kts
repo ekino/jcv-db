@@ -79,8 +79,8 @@ dependencies {
     api(project(":jcv-db-core"))
     implementation(group = "com.ekino.oss.jcv", name = "jcv-core", version = "${project.extra["jcv-core.version"]}")
     implementation(group = "org.skyscreamer", name = "jsonassert", version = "${project.extra["jsonassert.version"]}")
-    implementation("com.datastax.oss:java-driver-core:4.3.1")
-    implementation("com.datastax.oss:java-driver-query-builder:4.3.1")
+    implementation("com.datastax.oss:java-driver-core:4.14.1")
+    implementation("com.datastax.oss:java-driver-query-builder:4.14.1")
 
     testImplementation(group = "org.junit.jupiter", name = "junit-jupiter", version = "${project.extra["junit.version"]}")
 }

@@ -19,8 +19,9 @@ class DbComparatorCassandraTest {
             CassandraDataSource(
                 CASSANDRA_DC,
                 CASSANDRA_IP_ADDRESS,
-                CASSANDRA_PORT)
+                CASSANDRA_PORT
             )
+        )
 
         .build(query)
 
@@ -160,8 +161,9 @@ class DbComparatorCassandraTest {
                 CassandraDataSource(
                     CASSANDRA_DC,
                     CASSANDRA_IP_ADDRESS,
-                    CASSANDRA_PORT)
+                    CASSANDRA_PORT
                 )
+            )
 
             .isValidAgainst(expected)
     }
@@ -193,8 +195,9 @@ class DbComparatorCassandraTest {
                 CassandraDataSource(
                     CASSANDRA_DC,
                     CASSANDRA_IP_ADDRESS,
-                    CASSANDRA_PORT)
+                    CASSANDRA_PORT
                 )
+            )
 
             .isValidAgainst(expected)
     }
@@ -226,8 +229,9 @@ class DbComparatorCassandraTest {
                 CassandraDataSource(
                     CASSANDRA_DC,
                     CASSANDRA_IP_ADDRESS,
-                    CASSANDRA_PORT)
+                    CASSANDRA_PORT
                 )
+            )
 
             .isValidAgainst(expected)
     }
