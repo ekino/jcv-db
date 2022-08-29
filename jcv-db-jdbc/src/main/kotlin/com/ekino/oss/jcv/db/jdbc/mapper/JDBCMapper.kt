@@ -5,7 +5,7 @@ import java.util.UUID
 
 abstract class JDBCMapper : TypeMapper {
 
-    override fun getValueFromColumn(value: Any): Any {
+    override fun getValueFromColumn(value: Any): Any? {
         return when (value) {
             is Number -> mapNumberType(value)
             is Boolean -> mapBoolean(value)
@@ -21,5 +21,5 @@ abstract class JDBCMapper : TypeMapper {
     open fun mapByteArray(value: ByteArray): Any = value
     open fun mapString(value: String): Any = value
     open fun mapNumberType(value: Number): Any = value
-    open fun defaultMapper(value: Any): Any = value.toString()
+    open fun defaultMapper(value: Any): Any? = value.toString()
 }

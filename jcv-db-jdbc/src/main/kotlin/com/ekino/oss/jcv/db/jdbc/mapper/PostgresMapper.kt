@@ -24,17 +24,20 @@ import java.util.UUID
 
 open class PostgresMapper : JDBCMapper() {
 
-    override fun defaultMapper(value: Any): Any = when (value) {
+    override fun defaultMapper(value: Any): Any? = when (value) {
         is Timestamp -> value.toInstant().toString()
-        is PGcircle -> Circle(value.radius, convertPGPointToPointModel(value.center)).toJsonObject()
+        is PGcircle -> Circle(
+            value.radius,
+            value.center?.let { convertPGPointToPointModel(it) }
+        ).toJsonObject()
         is PGpoint -> convertPGPointToPointModel(value).toJsonObject()
         is PGlseg -> convertArrayPGPointToDefaultModel(value.point).toJsonArray()
         is PGline -> EuclideanLine(value.a, value.b, value.c).toJsonObject()
         is PGpolygon -> convertArrayPGPointToDefaultModel(value.points).toJsonArray()
         is PGpath -> convertArrayPGPointToDefaultModel(value.points).toJsonArray()
         is PGbox -> convertArrayPGPointToDefaultModel(value.point).toJsonArray()
-        is PGobject -> handlePgObject(value)
         is PGInterval -> value.value
+        is PGobject -> handlePgObject(value)
         else -> value.toString()
     }
 
@@ -50,10 +53,10 @@ open class PostgresMapper : JDBCMapper() {
 
     private fun convertPGPointToPointModel(point: PGpoint) = Point(point.x, point.y)
 
-    private fun convertArrayPGPointToDefaultModel(points: Array<PGpoint>) =
-        DefaultGeometricModel(points.map { convertPGPointToPointModel(it) }.toList())
+    private fun convertArrayPGPointToDefaultModel(points: Array<PGpoint>?) =
+        DefaultGeometricModel((points ?: emptyArray()).map { convertPGPointToPointModel(it) }.toList())
 
-    private fun handlePgObject(value: PGobject): Any {
+    private fun handlePgObject(value: PGobject): Any? {
         return when (val jsonObject = JSONTokener(value.value).nextValue()) {
             is JSONObject, is JSONArray -> jsonObject
             else -> value.value

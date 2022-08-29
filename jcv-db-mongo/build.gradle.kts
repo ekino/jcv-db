@@ -74,18 +74,17 @@ signing {
 }
 
 dependencies {
-    val mongoVersion = "4.0.1"
     implementation(kotlin("stdlib-jdk8"))
 
     api(project(":jcv-db-core"))
     implementation(group = "com.ekino.oss.jcv", name = "jcv-core", version = "${project.extra["jcv-core.version"]}")
     implementation(group = "org.skyscreamer", name = "jsonassert", version = "${project.extra["jsonassert.version"]}")
 
-    implementation("org.mongodb:mongodb-driver-sync:$mongoVersion")
+    implementation("org.mongodb:mongodb-driver-sync:4.7.1")
 
     testImplementation(group = "org.junit.jupiter", name = "junit-jupiter", version = "${project.extra["junit.version"]}")
 
-    testImplementation(group = "com.willowtreeapps.assertk", name = "assertk-jvm", version = "0.20") {
+    testImplementation(group = "com.willowtreeapps.assertk", name = "assertk-jvm", version = "0.25") {
         exclude(group = "org.jetbrains.kotlin", module = "kotlin-reflect")
     }
 }

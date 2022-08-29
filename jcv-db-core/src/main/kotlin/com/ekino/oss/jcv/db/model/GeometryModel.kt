@@ -7,6 +7,6 @@ data class Point(val x: Double, val y: Double, @field:JsonInclude(JsonInclude.In
 
 data class DefaultGeometricModel(@field:JsonValue val points: List<Point>)
 
-data class Circle(val radius: Double, val center: Point)
+data class Circle(val radius: Double, val center: Point?)
 
 data class EuclideanLine(val a: Double, val b: Double, val c: Double)

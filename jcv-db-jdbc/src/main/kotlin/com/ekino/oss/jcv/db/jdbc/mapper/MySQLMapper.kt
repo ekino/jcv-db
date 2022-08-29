@@ -15,10 +15,12 @@ open class MySQLMapper : JDBCMapper() {
         else -> value
     }
 
-    override fun defaultMapper(value: Any): Any = when (value) {
-        is Timestamp -> value.toInstant().toString()
-        is Time -> value.toLocalTime().toString()
-        else -> value.toString()
+    override fun defaultMapper(value: Any): Any {
+        return when (value) {
+            is Timestamp -> value.toInstant().toString()
+            is Time -> value.toLocalTime().toString()
+            else -> value.toString()
+        }
     }
 
     override fun mapString(value: String) = value.takeIfIsJson() ?: value

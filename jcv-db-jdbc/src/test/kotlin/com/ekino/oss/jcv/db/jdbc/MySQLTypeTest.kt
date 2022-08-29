@@ -55,7 +55,7 @@ class MySQLTypeTest {
                     "column_timestamp": "{#date_time_format:iso_instant#}",
                     "column_decimal": 7895,
                     "column_bigint": 896932589235,
-                    "column_datetime": "{#date_time_format:iso_instant#}",
+                    "column_datetime": "{#date_time_format:iso_local_date_time#}",
                     "column_point": {
                         "x": 1,
                         "y": 3
