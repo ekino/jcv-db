@@ -75,6 +75,19 @@ jobs:
           --health-retries 10
 
     steps:
+      - uses: actions/checkout@v2
+      - name: Init database data for PostgreSQL
+        run: PGPASSWORD=postgres-password psql -h localhost -p 5432 -U postgres-user -f docker/postgresql/setup.sql postgres-test
+
+      - name: Init database data for MySQL
+        run: |
+          mysql --host 127.0.0.1 --port 3306 -u root --password=mysql-password --database=mysql-text < docker/mysql/setup.sql
+      - name: Init database data for MSSQL
+        run: sqlcmd -S localhost -U sa -P A_Str0ng_Required_Password -d master -i docker/mssql/setup.sql
+      - name: Init database data for Cassandra
+        run: |
+          docker cp docker/cassandra/setup.cql ${{ job.services.cassandra.id }}:/setup.cql
+          docker exec ${{ job.services.cassandra.id }} cqlsh localhost 9042 -f setup.cql
       - name: Setup java
         uses: actions/setup-java@v3
         with:
