@@ -80,7 +80,7 @@ dependencies {
     implementation(group = "com.ekino.oss.jcv", name = "jcv-core", version = "${project.extra["jcv-core.version"]}")
     implementation(group = "org.skyscreamer", name = "jsonassert", version = "${project.extra["jsonassert.version"]}")
 
-    implementation("org.mongodb:mongodb-driver-sync:4.7.1")
+    implementation("org.mongodb:mongodb-driver-sync:4.8.0")
 
     testImplementation(group = "org.junit.jupiter", name = "junit-jupiter", version = "${project.extra["junit.version"]}")
 
