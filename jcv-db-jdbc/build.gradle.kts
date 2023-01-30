@@ -84,7 +84,7 @@ dependencies {
     implementation(group = "com.microsoft.sqlserver", name = "mssql-jdbc", version = "${project.extra["mssql.version"]}")
     implementation(group = "mysql", name = "mysql-connector-java", version = "${project.extra["mysql.version"]}")
     implementation(group = "org.springframework", name = "spring-jdbc", version = "5.3.23")
-    implementation(group = "com.fasterxml.jackson.core", name = "jackson-databind", version = "2.12.6.1")
+    implementation(group = "com.fasterxml.jackson.core", name = "jackson-databind", version = "2.14.2")
 
     testImplementation(group = "org.junit.jupiter", name = "junit-jupiter", version = "${project.extra["junit.version"]}")
     testImplementation(group = "org.assertj", name = "assertj-core", version = "3.23.1")
