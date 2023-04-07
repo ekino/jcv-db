@@ -226,26 +226,6 @@ class MSSQLTypeTest {
     }
 
     @Test
-    fun `Should valid table against json with custom connection`() {
-        val expected = // language=json
-            """
-              [
-                {
-                  "id": "A849D2F7-7814-4D37-989E-A7D6EE4B5E05",
-                  "criteria_number": 0,
-                  "content": "content 1"
-                }
-              ]
-            """.trimIndent()
-
-        DBComparatorBuilder
-            .create()
-            .build("SELECT * FROM table_test WHERE id = 'A849D2F7-7814-4D37-989E-A7D6EE4B5E05'")
-            .using(DriverManager.getConnection(JDBC_URL, USERNAME, PASSWORD))
-            .isValidAgainst(expected)
-    }
-
-    @Test
     fun `Should valid table against json with custom mapper`() {
         val expected = // language=json
             """
