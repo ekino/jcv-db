@@ -46,13 +46,6 @@ class DbComparatorJDBC(
 
     fun <T : JsonValidator<*>> using(validators: List<T>) = using(JSONCompareMode.STRICT, validators)
 
-    fun using(connection: Connection) = DbComparatorJDBC(
-        query,
-        QueryConverter(connection),
-        jsonComparator,
-        customMapper
-    )
-
     fun using(mapper: JDBCMapper) =
         DbComparatorJDBC(
             query,

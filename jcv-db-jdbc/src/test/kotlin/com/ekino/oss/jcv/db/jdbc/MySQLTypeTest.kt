@@ -229,26 +229,6 @@ class MySQLTypeTest {
     }
 
     @Test
-    fun `Should valid table against json with custom connection`() {
-        val expected = // language=json
-            """
-              [
-                {
-                  "id": 1234,
-                  "criteria_number": 0,
-                  "content": "content 1"
-                }
-              ]
-            """.trimIndent()
-
-        DBComparatorBuilder
-            .create()
-            .build("SELECT * FROM table_test WHERE id = 1234")
-            .using(DriverManager.getConnection(JDBC_URL, USERNAME, PASSWORD))
-            .isValidAgainst(expected)
-    }
-
-    @Test
     fun `Should valid table against json with custom matcher`() {
         val expected = // language=json
             """

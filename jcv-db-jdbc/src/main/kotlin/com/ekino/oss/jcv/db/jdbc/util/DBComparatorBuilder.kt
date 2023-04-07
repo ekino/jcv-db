@@ -14,7 +14,7 @@ class DBComparatorBuilder(
 ) {
 
     private lateinit var connection: Connection
-    private lateinit var customMapper: JDBCMapper
+    private var customMapper: JDBCMapper? = null
 
     companion object {
         @JvmStatic

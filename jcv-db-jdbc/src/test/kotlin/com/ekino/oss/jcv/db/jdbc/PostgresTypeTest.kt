@@ -212,26 +212,6 @@ class PostgresTypeTest {
     }
 
     @Test
-    fun `Should valid table against json with custom connection`() {
-        val expected = // language=json
-            """
-              [
-                {
-                  "id": "07621b34-35dc-4b8f-94f4-b0f7e98b4088",
-                  "criteria_number": 0,
-                  "content": "content 1"
-                }
-              ]
-            """.trimIndent()
-
-        DBComparatorBuilder
-            .create()
-            .build("SELECT * FROM table_test WHERE id = '07621b34-35dc-4b8f-94f4-b0f7e98b4088'")
-            .using(DriverManager.getConnection(JDBC_URL, USERNAME, PASSWORD))
-            .isValidAgainst(expected)
-    }
-
-    @Test
     fun `Should valid table against json with custom matcher`() {
         val expected = // language=json
             """
