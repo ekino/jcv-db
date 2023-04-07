@@ -8,22 +8,13 @@ import com.ekino.oss.jcv.db.jdbc.mapper.JDBCMapper
 import org.skyscreamer.jsonassert.JSONCompareMode
 import java.sql.Connection
 
-class DBComparatorBuilder {
+class DBComparatorBuilder(
+    private var mode: JSONCompareMode,
+    private var validators: List<JsonValidator<*>>
+) {
 
-    constructor()
-
-    constructor(
-        mode: JSONCompareMode,
-        validators: List<JsonValidator<*>>
-    ) {
-        this.mode = mode
-        this.validators = validators
-    }
-
-    private lateinit var mode: JSONCompareMode
-    private lateinit var validators: List<JsonValidator<*>>
-    private var connection: Connection? = null
-    private var customMapper: JDBCMapper? = null
+    private lateinit var connection: Connection
+    private lateinit var customMapper: JDBCMapper
 
     companion object {
         @JvmStatic
