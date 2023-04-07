@@ -13,7 +13,7 @@ import org.skyscreamer.jsonassert.JSONCompareMode
 import java.io.InputStream
 import java.sql.Connection
 
-class DbComparatorJDBC constructor(
+class DbComparatorJDBC(
     private val query: String,
     private val queryConverter: QueryConverter,
     private val jsonComparator: JsonComparator,
@@ -56,7 +56,7 @@ class DbComparatorJDBC constructor(
     fun using(mapper: JDBCMapper) =
         DbComparatorJDBC(
             query,
-            QueryConverter(queryConverter.connection),
+            queryConverter,
             jsonComparator,
             mapper
         )
