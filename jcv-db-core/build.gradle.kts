@@ -79,7 +79,7 @@ dependencies {
 
     implementation(group = "com.ekino.oss.jcv", name = "jcv-core", version = "${project.extra["jcv-core.version"]}")
     implementation(group = "org.skyscreamer", name = "jsonassert", version = "${project.extra["jsonassert.version"]}")
-    implementation(group = "com.fasterxml.jackson.core", name = "jackson-databind", version = "2.14.2")
+    implementation(group = "com.fasterxml.jackson.core", name = "jackson-databind", version = "2.15.2")
 
     implementation(group = "org.locationtech.jts", name = "jts-core", version = "1.19.0")
 
