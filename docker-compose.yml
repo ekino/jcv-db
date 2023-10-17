@@ -48,7 +48,7 @@ services:
       - ./docker/postgresql/setup.sql:/docker-entrypoint-initdb.d/setup.sql
 
   mongodb:
-    image: mongo:3.1.5
+    image: arm64v8/mongo:3.6
     ports:
       - '27017:27017'
 
