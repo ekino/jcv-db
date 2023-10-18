@@ -20,6 +20,7 @@ import com.ekino.oss.jcv.db.util.JsonConverter.formatInput
 import org.assertj.core.api.AbstractAssert
 import org.assertj.db.type.Source
 import org.assertj.db.type.Table
+import org.intellij.lang.annotations.Language
 import org.json.JSONArray
 import org.json.JSONException
 import org.skyscreamer.jsonassert.JSONCompareMode
@@ -64,7 +65,7 @@ class DbComparatorAssertJ(
         mapper
     )
 
-    fun isValidAgainst(input: String) = formatInput(input)?.let { compareActualAndExcepted(it) } ?: throw DbAssertException(
+    fun isValidAgainst(@Language("JSON") input: String) = formatInput(input)?.let { compareActualAndExcepted(it) } ?: throw DbAssertException(
         "Unable to parse expected result from string to json"
     )
 
