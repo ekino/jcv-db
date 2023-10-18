@@ -10,8 +10,6 @@ import org.skyscreamer.jsonassert.JSONCompareMode
 
 class DbComparatorBuilder {
 
-    constructor()
-
     constructor(
         mode: JSONCompareMode,
         validators: List<JsonValidator<*>>

@@ -250,10 +250,10 @@ class MySQLTypeTest {
 
     private fun customValidator(): JsonValidator<String> {
         return validator {
-            templatedValidator<String>(
+            templatedValidator(
                 "custom_notempty",
                 comparator { actual, expected ->
-                    if (actual == null || actual.isEmpty()) {
+                    if (actual.isNullOrEmpty()) {
                         throw ValueMatcherException("Value is null or empty", expected, actual)
                     }
                     true
