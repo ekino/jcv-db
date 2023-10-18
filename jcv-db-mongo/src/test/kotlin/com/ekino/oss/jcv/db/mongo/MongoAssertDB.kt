@@ -58,7 +58,6 @@ class MongoAssertDB {
 
     @Test
     fun `Should assert mongo collection`() {
-
         val expected = // language=json
             """
                 [
@@ -96,7 +95,6 @@ class MongoAssertDB {
 
     @Test
     fun `Should assert single document`() {
-
         val expected = // language=json
             """
               {
@@ -110,7 +108,6 @@ class MongoAssertDB {
 
     @Test
     fun `Should validate document with json object field`() {
-
         val expected = // language=json
             """
                 [
@@ -132,7 +129,6 @@ class MongoAssertDB {
 
     @Test
     fun `Should validate document with json array field`() {
-
         val expected = // language=json
             """
                 [
@@ -154,7 +150,6 @@ class MongoAssertDB {
 
     @Test
     fun `Should validate document with json object validator`() {
-
         val expected = // language=json
             """
                 [
@@ -174,7 +169,6 @@ class MongoAssertDB {
 
     @Test
     fun `Should validate document with json array validator`() {
-
         val expected = // language=json
             """
                 [
@@ -191,7 +185,6 @@ class MongoAssertDB {
 
     @Test
     fun `Should assert request with field restriction`() {
-
         val expected = // language=json
             """
                 [
@@ -219,7 +212,6 @@ class MongoAssertDB {
 
     @Test
     fun `Should assert request with ordering`() {
-
         val expected = // language=json
             """
                 [

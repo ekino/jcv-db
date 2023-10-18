@@ -22,8 +22,8 @@ kotlinQuality {
 
 val javadocJar by tasks.registering(Jar::class) {
     dependsOn("dokkaHtml")
-    archiveClassifier.set("javadoc")
-    from(buildDir.resolve("dokka"))
+    archiveClassifier = "javadoc"
+    from(layout.buildDirectory.file("dokka"))
 }
 
 java {
@@ -45,7 +45,7 @@ tasks {
     withType<DokkaTask> {
         dokkaSourceSets {
             configureEach {
-                reportUndocumented.set(false)
+                reportUndocumented = false
             }
         }
     }

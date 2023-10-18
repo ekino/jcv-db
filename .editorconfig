@@ -1,2 +1,2 @@
 [*.{kt,kts}]
-disabled_rules=import-ordering
+ktlint_disabled_rules=import-ordering
