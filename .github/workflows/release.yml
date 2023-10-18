@@ -116,30 +116,3 @@ jobs:
           GPG_KEY_ID: ${{ secrets.GPG_KEY_ID }}
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
           SIGN_FILE_PATH: "${{ github.workspace }}/.github/workflows/jcv_db_sign.gpg"
-      - name: Create Github release
-        run: |
-          set -x
-          assets=()
-          for asset in ${JCV_DB_CORE_ASSETS_FOLDER}; do
-            assets+=("-a" "$asset")
-          done
-          for asset in ${JCV_DB_ASSERTJ_DB_ASSETS_FOLDER}; do
-            assets+=("-a" "$asset")
-          done
-          for asset in ${JCV_DB_CASSANDRA_ASSETS_FOLDER}; do
-            assets+=("-a" "$asset")
-          done
-          for asset in ${JCV_DB_JDBC_ASSETS_FOLDER}; do
-            assets+=("-a" "$asset")
-          done
-          for asset in ${JCV_DB_MONGO_ASSETS_FOLDER}; do
-            assets+=("-a" "$asset")
-          done
-          gh release create --draft "${assets[@]}" -m "Release of ${{ github.ref }}" "${{ github.ref }}"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          JCV_DB_CORE_ASSETS_FOLDER: "${{ github.workspace }}/jcv-db-core/build/libs/*"
-          JCV_DB_ASSERTJ_DB_ASSETS_FOLDER: "${{ github.workspace }}/jcv-db-assertj-db/build/libs/*"
-          JCV_DB_CASSANDRA_ASSETS_FOLDER: "${{ github.workspace }}/jcv-db-cassandra/build/libs/*"
-          JCV_DB_JDBC_ASSETS_FOLDER: "${{ github.workspace }}/jcv-db-jdbc/build/libs/*"
-          JCV_DB_MONGO_ASSETS_FOLDER: "${{ github.workspace }}/jcv-db-mongo/build/libs/*"
