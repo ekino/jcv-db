@@ -80,7 +80,7 @@ jobs:
           --health-retries 10
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Init database data for PostgreSQL
         run: PGPASSWORD=postgres-password psql -h localhost -p 5432 -U postgres-user -f docker/postgresql/setup.sql postgres-test
 
