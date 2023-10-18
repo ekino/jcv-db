@@ -9,6 +9,7 @@ import com.ekino.oss.jcv.db.cassandra.util.QueryConverter
 import com.ekino.oss.jcv.db.exception.DbAssertException
 import com.ekino.oss.jcv.db.util.JsonConverter
 import com.ekino.oss.jcv.db.util.JsonConverter.compareJsonAndLogResult
+import org.intellij.lang.annotations.Language
 import org.json.JSONArray
 import org.skyscreamer.jsonassert.JSONCompareMode
 import java.io.InputStream
@@ -29,7 +30,7 @@ class DbComparatorCassandra(
         fun assertThatQuery(select: Select) = DBComparatorBuilder.create().build(select.asCql())
     }
 
-    fun isValidAgainst(input: String) = JsonConverter.formatInput(input)?.let { compareActualAndExcepted(it) } ?: throw DbAssertException(
+    fun isValidAgainst(@Language("JSON") input: String) = JsonConverter.formatInput(input)?.let { compareActualAndExcepted(it) } ?: throw DbAssertException(
         "Unable to parse expected result from string to json"
     )
 
