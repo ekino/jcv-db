@@ -9,7 +9,7 @@ build:
 complexity:
   LongMethod:
     excludes: *testFolders
-  ComplexMethod:
+  CyclomaticComplexMethod:
     ignoreSimpleWhenEntries: true
     threshold: 11
   LongParameterList:

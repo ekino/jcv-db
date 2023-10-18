@@ -4,7 +4,7 @@ plugins {
     base
     kotlin("jvm") version "1.8.10"
     id("org.jetbrains.dokka") version "1.7.10" apply false
-    id("com.ekino.oss.plugin.kotlin-quality") version "3.3.0" apply false
+    id("com.ekino.oss.plugin.kotlin-quality") version "4.2.0" apply false
     id("net.researchgate.release") version "3.0.2"
 }
 
@@ -39,31 +39,31 @@ subprojects {
         publications {
             create<MavenPublication>("mavenJava") {
                 pom {
-                    name.set("JCV-DB")
-                    description.set("JSON Content Validator for database (JCV-DB).")
-                    url.set("https://github.com/ekino/jcv-db")
+                    name = "JCV-DB"
+                    description = "JSON Content Validator for database (JCV-DB)."
+                    url = "https://github.com/ekino/jcv-db"
                     licenses {
                         license {
-                            name.set("MIT License (MIT)")
-                            url.set("https://opensource.org/licenses/mit-license")
+                            name = "MIT License (MIT)"
+                            url = "https://opensource.org/licenses/mit-license"
                         }
                     }
                     developers {
                         developer {
-                            name.set("Nicolas Gunther")
-                            email.set("nicolas.gunther@ekino.com")
-                            organization.set("ekino")
-                            organizationUrl.set("https://www.ekino.com/")
+                            name = "Nicolas Gunther"
+                            email = "nicolas.gunther@ekino.com"
+                            organization = "ekino"
+                            organizationUrl = "https://www.ekino.com/"
                         }
                     }
                     scm {
-                        connection.set("scm:git:git://github.com/ekino/jcv-db.git")
-                        developerConnection.set("scm:git:ssh://github.com:ekino/jcv-db.git")
-                        url.set("https://github.com/ekino/jcv-db")
+                        connection = "scm:git:git://github.com/ekino/jcv-db.git"
+                        developerConnection = "scm:git:ssh://github.com:ekino/jcv-db.git"
+                        url = "https://github.com/ekino/jcv-db"
                     }
                     organization {
-                        name.set("ekino")
-                        url.set("https://www.ekino.com/")
+                        name = "ekino"
+                        url = "https://www.ekino.com/"
                     }
                 }
                 repositories {

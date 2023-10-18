@@ -22,12 +22,10 @@ class DbComparatorCassandraTest {
                 CASSANDRA_PORT
             )
         )
-
         .build(query)
 
     @Test
     fun `Should test cassandra type`() {
-
         val expected = // language=json
             """[{
             "bigint_field": 9223372036854775806,
@@ -164,7 +162,6 @@ class DbComparatorCassandraTest {
                     CASSANDRA_PORT
                 )
             )
-
             .isValidAgainst(expected)
     }
 
@@ -198,7 +195,6 @@ class DbComparatorCassandraTest {
                     CASSANDRA_PORT
                 )
             )
-
             .isValidAgainst(expected)
     }
 
@@ -232,7 +228,6 @@ class DbComparatorCassandraTest {
                     CASSANDRA_PORT
                 )
             )
-
             .isValidAgainst(expected)
     }
 }
