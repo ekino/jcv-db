@@ -87,5 +87,5 @@ dependencies {
     implementation(group = "com.fasterxml.jackson.core", name = "jackson-databind", version = "2.14.2")
 
     testImplementation(group = "org.junit.jupiter", name = "junit-jupiter", version = "${project.extra["junit.version"]}")
-    testImplementation(group = "org.assertj", name = "assertj-core", version = "3.23.1")
+    testImplementation(group = "org.assertj", name = "assertj-core", version = "3.24.2")
 }
