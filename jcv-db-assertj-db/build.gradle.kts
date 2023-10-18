@@ -79,7 +79,7 @@ dependencies {
     api(project(":jcv-db-core"))
     implementation(group = "com.ekino.oss.jcv", name = "jcv-core", version = "${project.extra["jcv-core.version"]}")
     implementation(group = "org.skyscreamer", name = "jsonassert", version = "${project.extra["jsonassert.version"]}")
-    implementation(group = "org.assertj", name = "assertj-core", version = "3.23.1")
+    implementation(group = "org.assertj", name = "assertj-core", version = "3.24.2")
     implementation(group = "org.assertj", name = "assertj-db", version = "2.0.2")
 
     implementation(group = "org.postgresql", name = "postgresql", version = "${project.extra["postgres.version"]}")
