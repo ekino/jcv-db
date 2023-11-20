@@ -83,7 +83,7 @@ dependencies {
     implementation(group = "org.postgresql", name = "postgresql", version = "${project.extra["postgres.version"]}")
     implementation(group = "com.microsoft.sqlserver", name = "mssql-jdbc", version = "${project.extra["mssql.version"]}")
     implementation(group = "mysql", name = "mysql-connector-java", version = "${project.extra["mysql.version"]}")
-    implementation(group = "org.springframework", name = "spring-jdbc", version = "5.3.23")
+    implementation(group = "org.springframework", name = "spring-jdbc", version = "6.1.0")
     implementation(group = "com.fasterxml.jackson.core", name = "jackson-databind", version = "2.15.3")
 
     testImplementation(group = "org.junit.jupiter", name = "junit-jupiter", version = "${project.extra["junit.version"]}")
