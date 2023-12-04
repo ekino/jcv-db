@@ -94,7 +94,7 @@ jobs:
           docker cp docker/cassandra/setup.cql ${{ job.services.cassandra.id }}:/setup.cql
           docker exec ${{ job.services.cassandra.id }} cqlsh localhost 9042 -f setup.cql
       - name: Setup java
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: "temurin"
           java-version: 11
