@@ -85,7 +85,7 @@ dependencies {
 
     testImplementation(group = "org.junit.jupiter", name = "junit-jupiter", version = "${project.extra["junit.version"]}")
 
-    testImplementation(group = "com.willowtreeapps.assertk", name = "assertk-jvm", version = "0.25") {
+    testImplementation(group = "com.willowtreeapps.assertk", name = "assertk-jvm", version = "0.28.0") {
         exclude(group = "org.jetbrains.kotlin", module = "kotlin-reflect")
     }
 }
