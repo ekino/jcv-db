@@ -10,6 +10,7 @@ JSON Content Validator for Database (JCV-DB) allow you to compare database conte
 ## Table of contents
 
 * [Summary](#summary)
+* [Prerequisites](#prerequisites)
 * [Quick start](#quick-start)
     * [Assertj-db module](#assertj-db)
     * [JDBC module](#jdbc-module)
@@ -20,6 +21,19 @@ JSON Content Validator for Database (JCV-DB) allow you to compare database conte
 
 JCV-DB provides assertions to validate database content against a json file. The goal is for now to support SQL and NoSQL databases : PostgreSQL, MySQL, MSSQL, Cassandra and mongoDB. 
 [JCV](https://github.com/ekino/jcv) validators are also supported making tests light and exhaustive.
+
+## Prerequisites
+
+If you want to test this project locally we must have the following software install:
+-	Java 11
+-	Docker
+-	Docker compose
+
+Some tests require that the database container is running. To start the containers, run the following command in the project root:
+````bash
+docker compose up -d
+````
+Note: Currently, the MSSQL Docker image (`mcr.microsoft.com/mssql/server`) is not supported for the ARM64 platform. However, you can work around this limitation using the method described in this post: [https://github.com/microsoft/mssql-docker/issues/668#issuecomment-1436802153](https://github.com/microsoft/mssql-docker/issues/668#issuecomment-1436802153)
 
 ## Quick Start
 
