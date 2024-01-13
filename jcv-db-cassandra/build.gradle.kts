@@ -2,12 +2,12 @@ import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm")
+    alias(libs.plugins.kotlin.jvm)
     `java-library`
     signing
     jacoco
-    id("org.jetbrains.dokka")
-    id("com.ekino.oss.plugin.kotlin-quality")
+    alias(libs.plugins.dokka)
+    alias(libs.plugins.kotlin.quality)
 }
 
 configurations {
@@ -74,13 +74,13 @@ signing {
 }
 
 dependencies {
-    implementation(kotlin("stdlib-jdk8"))
-
     api(project(":jcv-db-core"))
-    implementation(group = "com.ekino.oss.jcv", name = "jcv-core", version = "${project.extra["jcv-core.version"]}")
-    implementation(group = "org.skyscreamer", name = "jsonassert", version = "${project.extra["jsonassert.version"]}")
-    implementation("com.datastax.oss:java-driver-core:4.15.0")
-    implementation("com.datastax.oss:java-driver-query-builder:4.17.0")
 
-    testImplementation(group = "org.junit.jupiter", name = "junit-jupiter", version = "${project.extra["junit.version"]}")
+    implementation(libs.kotlin.stdlib)
+    implementation(libs.jcv.core)
+    implementation(libs.jsonassert)
+    implementation(libs.java.driver.core)
+    implementation(libs.java.driver.query.builder)
+
+    testImplementation(libs.junit)
 }

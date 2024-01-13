@@ -2,12 +2,12 @@ import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm")
+    alias(libs.plugins.kotlin.jvm)
     `java-library`
     signing
     jacoco
-    id("org.jetbrains.dokka")
-    id("com.ekino.oss.plugin.kotlin-quality")
+    alias(libs.plugins.dokka)
+    alias(libs.plugins.kotlin.quality)
 }
 
 configurations {
@@ -74,18 +74,16 @@ signing {
 }
 
 dependencies {
-    implementation(kotlin("stdlib-jdk8"))
-    implementation(kotlin("reflect"))
+    implementation(libs.kotlin.stdlib)
+    implementation(libs.kotlin.reflect)
 
-    implementation(group = "com.ekino.oss.jcv", name = "jcv-core", version = "${project.extra["jcv-core.version"]}")
-    implementation(group = "org.skyscreamer", name = "jsonassert", version = "${project.extra["jsonassert.version"]}")
-    implementation(group = "com.fasterxml.jackson.core", name = "jackson-databind", version = "2.15.3")
+    implementation(libs.jcv.core)
+    implementation(libs.jsonassert)
+    implementation(libs.jackson.databind)
+    implementation(libs.jts.core)
 
-    implementation(group = "org.locationtech.jts", name = "jts-core", version = "1.19.0")
-
-    testImplementation(group = "org.junit.jupiter", name = "junit-jupiter", version = "${project.extra["junit.version"]}")
-
-    testImplementation(group = "com.willowtreeapps.assertk", name = "assertk-jvm", version = "0.25") {
+    testImplementation(libs.junit)
+    testImplementation(libs.assertk.jvm) {
         exclude(group = "org.jetbrains.kotlin", module = "kotlin-reflect")
     }
 }
