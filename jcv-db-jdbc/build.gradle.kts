@@ -2,12 +2,12 @@ import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm")
+    alias(libs.plugins.kotlin.jvm)
     `java-library`
     signing
     jacoco
-    id("org.jetbrains.dokka")
-    id("com.ekino.oss.plugin.kotlin-quality")
+    alias(libs.plugins.dokka)
+    alias(libs.plugins.kotlin.quality)
 }
 
 configurations {
@@ -74,18 +74,18 @@ signing {
 }
 
 dependencies {
-    implementation(kotlin("stdlib-jdk8"))
-
     api(project(":jcv-db-core"))
-    implementation(group = "com.ekino.oss.jcv", name = "jcv-core", version = "${project.extra["jcv-core.version"]}")
-    implementation(group = "org.skyscreamer", name = "jsonassert", version = "${project.extra["jsonassert.version"]}")
 
-    implementation(group = "org.postgresql", name = "postgresql", version = "${project.extra["postgres.version"]}")
-    implementation(group = "com.microsoft.sqlserver", name = "mssql-jdbc", version = "${project.extra["mssql.version"]}")
-    implementation(group = "mysql", name = "mysql-connector-java", version = "${project.extra["mysql.version"]}")
-    implementation(group = "org.springframework", name = "spring-jdbc", version = "5.3.23")
-    implementation(group = "com.fasterxml.jackson.core", name = "jackson-databind", version = "2.15.3")
+    implementation(libs.kotlin.stdlib)
+    implementation(libs.jcv.core)
+    implementation(libs.jsonassert)
 
-    testImplementation(group = "org.junit.jupiter", name = "junit-jupiter", version = "${project.extra["junit.version"]}")
-    testImplementation(group = "org.assertj", name = "assertj-core", version = "3.24.2")
+    implementation(libs.postgres)
+    implementation(libs.mssql.jdbc)
+    implementation(libs.mysql.connector.java)
+    implementation(libs.spring.jdbc)
+    implementation(libs.jackson.databind)
+
+    testImplementation(libs.junit)
+    testImplementation(libs.assertj.core)
 }

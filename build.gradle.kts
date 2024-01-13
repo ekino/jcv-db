@@ -2,10 +2,10 @@ import net.researchgate.release.ReleasePlugin
 
 plugins {
     base
-    kotlin("jvm") version "1.8.10"
-    id("org.jetbrains.dokka") version "1.7.10" apply false
-    id("com.ekino.oss.plugin.kotlin-quality") version "4.2.0" apply false
-    id("net.researchgate.release") version "3.0.2"
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.dokka) apply false
+    alias(libs.plugins.kotlin.quality) apply false
+    alias(libs.plugins.researchgate.release)
 }
 
 allprojects {
@@ -15,12 +15,6 @@ allprojects {
         mavenCentral()
     }
 
-    project.extra.set("jcv-core.version", "1.5.0")
-    project.extra.set("jsonassert.version", "1.5.0")
-    project.extra.set("postgres.version", "42.5.0")
-    project.extra.set("mssql.version", "11.2.0.jre11")
-    project.extra.set("mysql.version", "8.0.29")
-    project.extra.set("junit.version", "5.9.0")
 }
 
 tasks.create("printVersion") {
