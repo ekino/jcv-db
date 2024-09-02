@@ -17,7 +17,7 @@ java-driver-query-builder = "4.17.0"
 jackson-databind = "2.15.3"
 jts-core = "1.19.0"
 assertk-jvm = "0.25"
-spring-jdbc = "5.3.23"
+spring-jdbc = "6.1.12"
 mongodb-driver = "4.9.0"
 
 
