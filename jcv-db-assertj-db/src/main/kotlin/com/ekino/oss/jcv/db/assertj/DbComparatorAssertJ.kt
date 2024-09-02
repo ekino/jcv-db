@@ -26,8 +26,7 @@ import org.json.JSONException
 import org.skyscreamer.jsonassert.JSONCompareMode
 import java.io.InputStream
 import java.sql.DriverManager
-import java.util.HashMap
-import java.util.Objects
+import java.util.*
 import javax.sql.DataSource
 
 class DbComparatorAssertJ(
@@ -86,16 +85,15 @@ class DbComparatorAssertJ(
     }
 
     private fun Table.convertTableToTableModel(): TableModel {
-        val tableModel = TableModel()
-        this.rowsList.forEach {
-            val rowModel = RowModel()
-            val cells = HashMap<String, Any?>()
-
-            it.columnsNameList.forEach { columnName -> cells[columnName] = it.getColumnValue(columnName) }
-            rowModel.cells = cells
-            tableModel.addRow(rowModel)
-        }
-        return tableModel
+        return rowsList
+            .map { row ->
+                row.columnsNameList.associateWith {
+                    row.getColumnValue(it)
+                }
+            }
+            .map(::RowModel)
+            .toSet()
+            .let(::TableModel)
     }
 
     private fun getMapperByDbType(source: Source?, dataSource: DataSource?): TypeMapper {

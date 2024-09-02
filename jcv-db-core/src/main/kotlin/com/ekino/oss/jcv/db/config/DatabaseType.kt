@@ -6,6 +6,6 @@ enum class DatabaseType(private val productName: String) {
     MSSQL("Microsoft SQL Server");
 
     companion object {
-        fun getDatabaseTypeByProductName(name: String) = values().find { it.productName == name }
+        fun getDatabaseTypeByProductName(name: String) = entries.find { it.productName == name }
     }
 }

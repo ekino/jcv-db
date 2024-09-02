@@ -35,12 +35,11 @@ class QueryConverter(private val connection: Connection) {
     private fun buildTableModel(resultSet: ResultSet): TableModel {
         val rows = mutableSetOf<RowModel>()
         while (resultSet.next()) {
-            val numberColumn = resultSet.metaData.columnCount
-            val cells = mutableMapOf<String, Any?>()
-            for (index in 1..numberColumn) {
-                cells[resultSet.metaData.getColumnName(index)] = resultSet.getObject(index)
+            (1..resultSet.metaData.columnCount).associate {
+                resultSet.metaData.getColumnName(it) to resultSet.getObject(it)
             }
-            rows.add(RowModel(cells))
+                .let(::RowModel)
+                .let(rows::add)
         }
         return TableModel(rows)
     }

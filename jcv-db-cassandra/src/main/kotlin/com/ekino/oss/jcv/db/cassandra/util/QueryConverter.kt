@@ -31,14 +31,16 @@ class QueryConverter(private val dataSource: CassandraDataSource? = null) {
     }
 
     private fun fromResultSetToTableModel(resultSet: ResultSet): TableModel {
-        val rows = mutableSetOf<RowModel>()
-        resultSet.forEach {
-            val cells = mutableMapOf<String, Any?>()
-            for (i in 0 until it.columnDefinitions.size()) {
-                cells[it.columnDefinitions[i].name.asCql(true)] = it.getObject(i)
+        return resultSet
+            .map { element ->
+                element.columnDefinitions
+                    .mapIndexed { index, columnDefinition ->
+                        columnDefinition.name.asCql(true) to element.getObject(index)
+                    }
+                    .toMap()
+                    .let(::RowModel)
             }
-            rows.add(RowModel(cells))
-        }
-        return TableModel(rows)
+            .toSet()
+            .let(::TableModel)
     }
 }
