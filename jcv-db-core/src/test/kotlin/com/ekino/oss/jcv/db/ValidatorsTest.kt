@@ -17,22 +17,27 @@ class ValidatorsTest {
 
     @Test
     fun `json object validator`() {
-        assertThat {
-            compare(
-                """{"field_name": {}}""",
-                """{"field_name": "{#json_object#}"}"""
-            )
-        }.isSuccess()
+        assertThat(
+            runCatching {
+                compare(
+                    """{"field_name": {}}""",
+                    """{"field_name": "{#json_object#}"}"""
+                )
+            }
+        ).isSuccess()
     }
 
     @Test
     fun `json array validator`() {
-        assertThat {
-            compare(
-                """{"field_name": []}""",
-                """{"field_name": "{#json_array#}"}"""
-            )
-        }.isSuccess()
+        assertThat(
+            runCatching {
+                compare(
+                    """{"field_name": []}""",
+                    """{"field_name": "{#json_array#}"}"""
+                )
+            }
+        )
+            .isSuccess()
     }
 
     @Test
@@ -71,7 +76,7 @@ class ValidatorsTest {
             }
     }
 
-    private fun compare(actualJson: String, expectedJson: String, body: (JSONCompareResult) -> Unit = {}) = body.invoke(
+    private fun compare(actualJson: String, expectedJson: String, body: (JSONCompareResult) -> Unit = {}) = body(
         JSONCompare.compareJSON(
             expectedJson,
             actualJson,
