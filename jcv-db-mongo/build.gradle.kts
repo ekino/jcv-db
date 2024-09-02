@@ -1,5 +1,4 @@
 import org.jetbrains.dokka.gradle.DokkaTask
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     alias(libs.plugins.kotlin.jvm)
@@ -30,12 +29,11 @@ java {
     withSourcesJar()
 }
 
+kotlin {
+    jvmToolchain(11)
+}
+
 tasks {
-    withType<KotlinCompile> {
-        kotlinOptions {
-            jvmTarget = JavaVersion.VERSION_11.toString()
-        }
-    }
 
     withType<Test> {
         useJUnitPlatform()

@@ -25,7 +25,7 @@ JCV-DB provides assertions to validate database content against a json file. The
 ## Prerequisites
 
 If you want to test this project locally we must have the following software install:
--	Java 11
+-	Java 11 (if launching without using Gradle)
 -	Docker
 -	Docker compose
 
