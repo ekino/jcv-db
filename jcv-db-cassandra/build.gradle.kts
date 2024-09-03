@@ -76,8 +76,7 @@ dependencies {
     implementation(libs.kotlin.stdlib)
     implementation(libs.jcv.core)
     implementation(libs.jsonassert)
-    implementation(libs.java.driver.core)
-    implementation(libs.java.driver.query.builder)
+    implementation(libs.bundles.cassandra.driver)
 
     testImplementation(libs.junit)
 }

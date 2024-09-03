@@ -25,7 +25,6 @@ val javadocJar by tasks.registering(Jar::class) {
     from(layout.buildDirectory.file("dokka"))
 }
 
-
 java {
     withSourcesJar()
 }
@@ -81,7 +80,6 @@ dependencies {
     implementation(libs.postgres)
     implementation(libs.mssql.jdbc)
     implementation(libs.mysql.connector.java)
-    implementation(libs.spring.jdbc)
     implementation(libs.jackson.databind)
 
     testImplementation(libs.junit)

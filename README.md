@@ -33,7 +33,6 @@ Some tests require that the database container is running. To start the containe
 ````bash
 docker compose up -d
 ````
-Note: Currently, the MSSQL Docker image (`mcr.microsoft.com/mssql/server`) is not supported for the ARM64 platform. However, you can work around this limitation using the method described in this post: [https://github.com/microsoft/mssql-docker/issues/668#issuecomment-1436802153](https://github.com/microsoft/mssql-docker/issues/668#issuecomment-1436802153)
 
 ## Quick Start
 

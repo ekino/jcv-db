@@ -1,8 +1,7 @@
 package com.ekino.oss.jcv.db
 
-import assertk.assertThat
+import assertk.assertFailure
 import assertk.assertions.hasMessage
-import assertk.assertions.isFailure
 import com.ekino.oss.jcv.db.model.RowModel
 import com.ekino.oss.jcv.db.model.TableModel
 import org.json.JSONArray
@@ -102,16 +101,18 @@ class DbComparatorAssertTest {
             )
         )
 
-        assertThat {
+        assertFailure {
             DbComparatorAssert.assertThatTableModel(tableModel).isValidAgainst(expected)
-        }.isFailure().hasMessage(
-            """[content_test=abcd]
-Expected: a JSON object
-     but none found
- ; [content_test=abcde]
-Unexpected: a JSON object
-
-Actual: [{"content_test":"abcde"}]"""
+        }.hasMessage(
+            """
+            [content_test=abcd]
+            Expected: a JSON object
+                 but none found
+             ; [content_test=abcde]
+            Unexpected: a JSON object
+            
+            Actual: [{"content_test":"abcde"}]
+            """.trimIndent()
         )
     }
 }

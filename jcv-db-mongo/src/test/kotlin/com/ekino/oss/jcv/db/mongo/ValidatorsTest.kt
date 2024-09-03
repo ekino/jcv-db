@@ -17,12 +17,14 @@ class ValidatorsTest {
 
     @Test
     fun `mongo id validator`() {
-        assertThat {
-            compare(
-                """{"field_name": "5d8253faef748a2c0e53ebfd"}""",
-                """{"field_name": "{#mongo_id#}"}"""
-            )
-        }.isSuccess()
+        assertThat(
+            runCatching {
+                compare(
+                    """{"field_name": "5d8253faef748a2c0e53ebfd"}""",
+                    """{"field_name": "{#mongo_id#}"}"""
+                )
+            }
+        ).isSuccess()
     }
 
     @Test
