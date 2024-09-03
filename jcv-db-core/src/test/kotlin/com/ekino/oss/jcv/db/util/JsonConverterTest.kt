@@ -32,31 +32,32 @@ class JsonConverterTest {
     @Test
     fun `Should load file and return a json array`() {
         val expectedResult = JSONArray("""[{"id":1}]""")
-        val inputString = this::class.java.classLoader.getResourceAsStream("test-file.json")!!.bufferedReader().use(BufferedReader::readText)
+        val inputString = this::class.java.classLoader.getResourceAsStream("test-file.json")!!.bufferedReader()
+            .use(BufferedReader::readText)
         assertThat(formatInput(inputString).toString()).isEqualTo(expectedResult.toString())
     }
 
     @Test
     fun `Should get an error when trying to load a json object`() {
         val expectedResult = JSONArray("""[{"id":1}]""")
-        val inputString = this::class.java.classLoader.getResourceAsStream("test-file-object.json")!!.bufferedReader().use(BufferedReader::readText)
+        val inputString = this::class.java.classLoader.getResourceAsStream("test-file-object.json")!!.bufferedReader()
+            .use(BufferedReader::readText)
         assertThat(formatInput(inputString).toString()).isEqualTo(expectedResult.toString())
     }
 
     @Test
     fun `Should get an error when trying to load an invalid json`() {
-        val inputString = this::class.java.classLoader.getResourceAsStream("test-file-invalid.json")!!.bufferedReader().use(BufferedReader::readText)
+        val inputString = this::class.java.classLoader.getResourceAsStream("test-file-invalid.json")!!.bufferedReader()
+            .use(BufferedReader::readText)
         assertThat(formatInput(inputString)).isNull()
     }
 
     @Test
     fun `Should convert table model to Json Array with default mapper`() {
         val table = TableModel(
-            mutableSetOf(
+            setOf(
                 RowModel(
-                    mutableMapOf(
-                        "id" to 1
-                    )
+                    mutableMapOf("id" to 1)
                 )
             )
         )
@@ -66,11 +67,9 @@ class JsonConverterTest {
     @Test
     fun `Should convert table model to Json Array with custom mapper`() {
         val table = TableModel(
-            mutableSetOf(
+            setOf(
                 RowModel(
-                    mutableMapOf(
-                        "id" to 1
-                    )
+                    mapOf("id" to 1)
                 )
             )
         )
@@ -79,6 +78,8 @@ class JsonConverterTest {
             override fun getValueFromColumn(value: Any) = "$value CUSTOM"
         }
 
-        assertThat(table.getTableModelAsJson(CustomMapper()).toString()).isEqualTo(JSONArray("""[{ "id" : "1 CUSTOM" }]""").toString())
+        assertThat(
+            table.getTableModelAsJson(CustomMapper()).toString()
+        ).isEqualTo(JSONArray("""[{ "id" : "1 CUSTOM" }]""").toString())
     }
 }

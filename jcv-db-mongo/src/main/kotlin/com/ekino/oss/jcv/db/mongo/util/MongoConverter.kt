@@ -7,8 +7,9 @@ import org.bson.Document
 class MongoConverter {
 
     fun convertContentToTableModel(collection: List<Document>): TableModel {
-        return TableModel(collection.map { convertDocumentToRowModel(it) }.toMutableSet())
+        return TableModel(collection.map(::convertDocumentToRowModel).toSet())
     }
 
-    private fun convertDocumentToRowModel(document: Document) = RowModel(document.keys.map { it to document[it]!! }.toMap().toMutableMap())
+    private fun convertDocumentToRowModel(document: Document) =
+        RowModel(document.keys.associateWith { document[it]!! }.toMap())
 }

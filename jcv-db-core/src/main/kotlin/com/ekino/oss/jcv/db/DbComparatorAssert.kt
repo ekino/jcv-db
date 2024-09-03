@@ -25,7 +25,7 @@ class DbComparatorAssert(private val actualJson: JSONArray, private val jsonComp
 
         @JvmStatic
         fun assertThatRowModel(rowModel: RowModel): DbComparatorAssert {
-            val actualJson = TableModel(mutableSetOf(rowModel)).getTableModelAsJson()
+            val actualJson = TableModel(setOf(rowModel)).getTableModelAsJson()
             return DbComparatorAssert(
                 actualJson,
                 JsonComparator(JSONCompareMode.NON_EXTENSIBLE, Validators.defaultValidators())

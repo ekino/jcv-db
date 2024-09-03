@@ -7,16 +7,16 @@ import com.ekino.oss.jcv.db.model.RowModel
 import com.ekino.oss.jcv.db.model.TableModel
 import java.net.InetSocketAddress
 
-class QueryConverter(private val dataSource: CassandraDataSource? = null) {
+class QueryConverter(private val dataSource: CassandraDataSource?) {
     fun fromQueryToTableModel(query: String): TableModel {
-        val session = buildCqlSession(dataSource)
-
-        val resultSet = session.execute(query)
-        return fromResultSetToTableModel(resultSet)
+        return buildCqlSession().use { session ->
+            val resultSet = session.execute(query)
+            fromResultSetToTableModel(resultSet)
+        }
     }
 
-    private fun buildCqlSession(dataSource: CassandraDataSource? = null): CqlSession {
-        dataSource ?: throw DbAssertException("You have to defined a valida datource")
+    private fun buildCqlSession(): CqlSession {
+        dataSource ?: throw DbAssertException("You have to defined a valida datasource")
 
         val builder = CqlSession
             .builder()
@@ -31,14 +31,16 @@ class QueryConverter(private val dataSource: CassandraDataSource? = null) {
     }
 
     private fun fromResultSetToTableModel(resultSet: ResultSet): TableModel {
-        val rows = mutableSetOf<RowModel>()
-        resultSet.forEach {
-            val cells = mutableMapOf<String, Any?>()
-            for (i in 0 until it.columnDefinitions.size()) {
-                cells[it.columnDefinitions[i].name.asCql(true)] = it.getObject(i)
+        return resultSet
+            .map { element ->
+                element.columnDefinitions
+                    .mapIndexed { index, columnDefinition ->
+                        columnDefinition.name.asCql(true) to element.getObject(index)
+                    }
+                    .toMap()
+                    .let(::RowModel)
             }
-            rows.add(RowModel(cells))
-        }
-        return TableModel(rows)
+            .toSet()
+            .let(::TableModel)
     }
 }

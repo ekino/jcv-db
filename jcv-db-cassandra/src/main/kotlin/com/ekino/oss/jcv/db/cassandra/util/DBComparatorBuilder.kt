@@ -7,20 +7,13 @@ import com.ekino.oss.jcv.db.cassandra.DbComparatorCassandra
 import com.ekino.oss.jcv.db.config.DBValidators
 import org.skyscreamer.jsonassert.JSONCompareMode
 
-class DBComparatorBuilder {
+class DBComparatorBuilder(
+    private var mode: JSONCompareMode,
+    private var validators: List<JsonValidator<*>>
+) {
 
-    constructor()
-
-    constructor(
-        mode: JSONCompareMode,
-        validators: List<JsonValidator<*>>
-    ) {
-        this.mode = mode
-        this.validators = validators
-    }
-
-    private lateinit var mode: JSONCompareMode
-    private lateinit var validators: List<JsonValidator<*>>
+    // todo(any): this datasource should not be nullable.
+    //  It is however required because a builder can be built without one.
     private var datasource: CassandraDataSource? = null
     private var customMapper: CassandraMapper? = null
 

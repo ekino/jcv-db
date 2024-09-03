@@ -49,31 +49,32 @@ class DbComparatorAssertTest {
             ]
             """.trimIndent()
 
-        val tableModel = TableModel()
-        tableModel.addRow(
-            RowModel(
-                mutableMapOf(
-                    "id" to "0840ad8f-db82-472d-9dff-bb6d64992222",
-                    "column_boolean" to true,
-                    "column_char_varying" to "char varying",
-                    "column_varchar" to "varchar",
-                    "column_character" to "character",
-                    "column_char" to "char",
-                    "column_text" to "text",
-                    "column_unlimited_varchar" to "unlimited varcharZOEFOEZUFHHZELF",
-                    "column_smallint" to 123,
-                    "column_int" to 12355,
-                    "column_serial" to 3282,
-                    "column_float" to 123.2235,
-                    "column_real" to 125125.13,
-                    "column_numeric" to 312,
-                    "column_date" to "2019-06-07",
-                    "column_time" to "17:12:28",
-                    "column_timestamp" to "2019-06-07 00:00:00.0",
-                    "column_timestamptz" to "2019-06-07 00:00:00.0",
-                    "column_interval" to "0 years 0 mons 100 days 0 hours 0 mins 0.00 secs",
-                    "column_json" to JSONArray("[{\"key\": \"Hello World !\"}]"),
-                    "column_jsonb" to JSONObject("{\"key\": \"Hello World !\"}")
+        val tableModel = TableModel(
+            setOf(
+                RowModel(
+                    mapOf(
+                        "id" to "0840ad8f-db82-472d-9dff-bb6d64992222",
+                        "column_boolean" to true,
+                        "column_char_varying" to "char varying",
+                        "column_varchar" to "varchar",
+                        "column_character" to "character",
+                        "column_char" to "char",
+                        "column_text" to "text",
+                        "column_unlimited_varchar" to "unlimited varcharZOEFOEZUFHHZELF",
+                        "column_smallint" to 123,
+                        "column_int" to 12355,
+                        "column_serial" to 3282,
+                        "column_float" to 123.2235,
+                        "column_real" to 125125.13,
+                        "column_numeric" to 312,
+                        "column_date" to "2019-06-07",
+                        "column_time" to "17:12:28",
+                        "column_timestamp" to "2019-06-07 00:00:00.0",
+                        "column_timestamptz" to "2019-06-07 00:00:00.0",
+                        "column_interval" to "0 years 0 mons 100 days 0 hours 0 mins 0.00 secs",
+                        "column_json" to JSONArray("[{\"key\": \"Hello World !\"}]"),
+                        "column_jsonb" to JSONObject("{\"key\": \"Hello World !\"}")
+                    )
                 )
             )
         )
@@ -92,11 +93,12 @@ class DbComparatorAssertTest {
             ]
             """.trimIndent()
 
-        val tableModel = TableModel()
-        tableModel.addRow(
-            RowModel(
-                mutableMapOf(
-                    "content_test" to "abcde"
+        val tableModel = TableModel(
+            setOf(
+                RowModel(
+                    mapOf(
+                        "content_test" to "abcde"
+                    )
                 )
             )
         )

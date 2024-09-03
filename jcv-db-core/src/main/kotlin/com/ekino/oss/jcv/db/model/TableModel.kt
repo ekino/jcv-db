@@ -5,9 +5,7 @@ import com.ekino.oss.jcv.db.mapper.TypeMapper
 import org.json.JSONArray
 import org.json.JSONObject
 
-data class TableModel(val rows: MutableSet<RowModel> = mutableSetOf()) {
-    fun addRow(row: RowModel) = rows.add(row)
-
+data class TableModel(val rows: Set<RowModel>) {
     fun getTableModelAsJson(typeMapper: TypeMapper? = null): JSONArray {
         val mapper = typeMapper ?: DefaultMapper()
         return JSONArray(
@@ -24,7 +22,8 @@ data class TableModel(val rows: MutableSet<RowModel> = mutableSetOf()) {
         .map { entry -> entry.key.lowercase() to getValueFromMapper(entry.value, mapper) }.toMap()
         .let { map -> JSONObject(map) }
 
-    private fun getValueFromMapper(value: Any?, mapper: TypeMapper) = value?.let { mapper.getValueFromColumn(it) } ?: JSONObject.NULL
+    private fun getValueFromMapper(value: Any?, mapper: TypeMapper) =
+        value?.let { mapper.getValueFromColumn(it) } ?: JSONObject.NULL
 }
 
-data class RowModel(var cells: MutableMap<String, Any?> = mutableMapOf())
+data class RowModel(val cells: Map<String, Any?>)
