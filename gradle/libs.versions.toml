@@ -3,7 +3,7 @@
 jcv-core = "1.5.0"
 jsonassert = "1.5.3"
 postgres = "42.7.4"
-mssql = "11.2.0.jre11"
+mssql = "12.8.1.jre11"
 mysql = "8.4.0"
 junit = "5.11.0"
 assertj-core = "3.26.3"
